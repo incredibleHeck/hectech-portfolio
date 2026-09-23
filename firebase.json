@@ -12,7 +12,7 @@
       "README.md",
       "firestore.rules"
     ],
-    "cleanUrls": true,
+    "cleanUrls": false,
     "headers": [
       {
         "source": "/robots.txt",
