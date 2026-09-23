@@ -1,0 +1,9 @@
+# The site itself is meant to be found. The PDFs are not — they should be
+# reached through the page, not surfaced as loose documents in search.
+User-agent: *
+Allow: /
+Disallow: /assets/*.pdf$
+Disallow: /assets/CV_Hector_Aryiku.pdf
+Disallow: /assets/Hector_Aryiku_Engineering_Portfolio.pdf
+
+Sitemap: https://hectech.web.app/sitemap.xml

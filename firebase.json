@@ -15,6 +15,19 @@
     "cleanUrls": true,
     "headers": [
       {
+        "source": "**/*.pdf",
+        "headers": [
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex, noarchive"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=604800"
+          }
+        ]
+      },
+      {
         "source": "**/*.@(jpg|jpeg|png|webp|svg|pdf)",
         "headers": [
           {
