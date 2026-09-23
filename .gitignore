@@ -11,3 +11,7 @@ dist/
 # Remove this line if you want it tracked.
 assets/CV_Hector_Aryiku.pdf
 CV_Hector_Aryiku_with-references.*
+
+# Rendered output — rebuild with documents/build_cv.py
+documents/*.pdf
+documents/*.docx
