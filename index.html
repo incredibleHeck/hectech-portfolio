@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hector Aryiku — Systems &amp; Full-Stack Product Engineer</title>
+<meta name="description" content="HecTech — Hector Aryiku builds offline-first products and systems software: constraint-solving schedulers, native Rust desktop apps, and a draughts engine with NNUE evaluation. Accra, Ghana.">
+<meta name="author" content="Hector Aryiku">
+<meta property="og:title" content="Hector Aryiku — Systems &amp; Full-Stack Product Engineer">
+<meta property="og:description" content="Software that keeps working when the network doesn't. Offline-first products, native desktop systems, and search algorithms.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/og-logo.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAF8F4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,300..700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32-onlight.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png">
+<style>
+/* ═══════════════════════════════════════════════════════
+   HecTech — tokens
+   Ground: thermal-print black (blue-black, not neutral)
+   Text:   thermal-paper white (warm)
+   Accent: phosphor amber, used once and sparingly
+   ═══════════════════════════════════════════════════════ */
+:root{
+  /* Ground is thermal-receipt paper; ink is warm near-black.
+     Accent is sampled from the HecTech logo (#C5A560) and darkened
+     to #81662C — same hue, 5.1:1 on the paper, passes AA. */
+  --ink:        #FAF8F4;
+  --ink-raise:  #F3F0E9;
+  --ink-raise2: #EBE7DD;
+  --line:       #DED8CB;
+  --line-soft:  #EAE5DB;
+
+  --paper:      #1A1714;
+  --paper-2:    #3D372F;
+  --paper-3:    #635B50;
+  --paper-4:    #736A5C;   /* 5.02:1 on the paper — AA for the provenance lines */
+
+  --amber:      #81662C;
+  --amber-soft: #F6F0DE;
+  --amber-line: #DFCFA3;
+
+  --live:       #2F6B4F;
+  --live-soft:  #E4F0E9;
+
+  --display: 'Archivo', system-ui, sans-serif;
+  --serif:   'Source Serif 4', Georgia, serif;
+  --mono:    'IBM Plex Mono', ui-monospace, Consolas, monospace;
+
+  --gut:  clamp(20px, 5vw, 64px);
+  --maxw: 1180px;
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  background:var(--ink);
+  color:var(--paper-2);
+  font-family:var(--serif);
+  font-size:17px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* No ambient wash on paper. The ground carries itself. */
+
+.wrap{ max-width:var(--maxw); margin:0 auto; padding:0 var(--gut); position:relative; z-index:2; }
+
+a{ color:inherit; }
+:focus-visible{ outline:2px solid var(--amber); outline-offset:3px; border-radius:2px; }
+
+/* ── type roles ─────────────────────────────────────── */
+.mono{ font-family:var(--mono); font-variant-ligatures:none; }
+.disp{ font-family:var(--display); }
+
+/* ── eyebrow: a section's machine-readable label ────── */
+.eyebrow{
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--amber);
+  display:flex; align-items:center; gap:12px; margin-bottom:26px;
+}
+.eyebrow::after{ content:""; flex:1; height:1px; background:var(--line); }
+
+h2.sec-title{
+  font-family:var(--display); font-variation-settings:'wdth' 92;
+  font-size:clamp(30px,4.4vw,46px); font-weight:800; letter-spacing:-.022em;
+  color:var(--paper); line-height:1.05; margin-bottom:14px;
+}
+.sec-lede{
+  font-size:18px; color:var(--paper-3); max-width:60ch; line-height:1.6;
+}
+
+section{ padding:clamp(72px,10vw,124px) 0; }
+
+/* ═══════════ NAV ═══════════ */
+.nav{
+  position:sticky; top:0; z-index:60;
+  background:rgba(250,248,244,.86); backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent; transition:border-color .3s;
+}
+.nav.stuck{ border-bottom-color:var(--line); }
+.nav-in{
+  max-width:var(--maxw); margin:0 auto; padding:14px var(--gut);
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+}
+.brand{
+  font-family:var(--display); font-variation-settings:'wdth' 78;
+  font-weight:800; font-size:19px; letter-spacing:-.01em; color:var(--paper);
+  text-decoration:none; display:flex; align-items:center; gap:10px;
+}
+.brand span{ color:var(--amber); }
+.brand-mark{ height:30px; width:auto; display:block; }
+@media(max-width:420px){ .brand-mark{ height:26px; } }
+
+/* footer lockup — the logo's own wordmark signs the page off */
+.foot-logo{ height:54px; width:auto; display:block; margin-bottom:18px; opacity:.92; }
+.nav-links{ display:flex; gap:28px; align-items:center; }
+.nav-links a{
+  font-family:var(--mono); font-size:12.5px; letter-spacing:.05em;
+  color:var(--paper-3); text-decoration:none; transition:color .18s;
+}
+.nav-links a:hover{ color:var(--paper); }
+.nav-cta{
+  font-family:var(--mono); font-size:12.5px; font-weight:500;
+  color:var(--ink) !important; background:var(--amber);
+  padding:8px 16px; border-radius:2px; text-decoration:none;
+  transition:background .18s;
+}
+.nav-cta:hover{ background:#6B5423; }
+@media(max-width:760px){ .nav-links a:not(.nav-cta){ display:none; } }
+
+/* ═══════════ HERO ═══════════ */
+.hero{ padding:clamp(56px,9vw,104px) 0 0; }
+.hero-grid{
+  display:grid; grid-template-columns:132px 1fr; gap:clamp(22px,4vw,44px);
+  align-items:start;
+}
+@media(max-width:700px){ .hero-grid{ grid-template-columns:1fr; gap:26px; } }
+
+/* ID-photo treatment: square, hairline, like a document portrait */
+.portrait{
+  width:132px; height:132px; border:1px solid var(--line);
+  padding:5px; background:var(--ink-raise); position:relative;
+}
+.portrait img{
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter:grayscale(.12) contrast(1.02);
+}
+.portrait figcaption{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--paper-4); margin-top:8px;
+}
+@media(max-width:700px){ .portrait{ width:104px; height:104px; } }
+
+.hero h1{
+  font-family:var(--display); font-variation-settings:'wdth' 108;
+  font-size:clamp(34px,5.9vw,62px); font-weight:800;
+  line-height:.99; letter-spacing:-.036em; color:var(--paper);
+  max-width:15ch; margin-bottom:22px;
+}
+.hero h1 em{ font-style:normal; color:var(--amber); }
+
+.hero-sub{
+  font-size:clamp(17px,2vw,20px); color:var(--paper-3);
+  max-width:56ch; line-height:1.58; margin-bottom:26px;
+}
+.hero-id{
+  font-family:var(--mono); font-size:12.5px; letter-spacing:.04em;
+  color:var(--paper-4); display:flex; flex-wrap:wrap; gap:8px 16px; margin-bottom:30px;
+}
+.hero-id b{ color:var(--paper); font-weight:500; }
+.hero-actions{ display:flex; flex-wrap:wrap; gap:12px; }
+.btn{
+  font-family:var(--mono); font-size:13px; font-weight:500;
+  padding:12px 22px; border-radius:2px; text-decoration:none;
+  display:inline-flex; align-items:center; gap:9px; transition:all .18s;
+}
+.btn-primary{ background:var(--amber); color:var(--ink); border:1px solid var(--amber); }
+.btn-primary:hover{ background:#6B5423; border-color:#6B5423; }
+.btn-ghost{ background:transparent; color:var(--paper); border:1px solid var(--line); }
+.btn-ghost:hover{ border-color:var(--paper-4); background:var(--ink-raise); }
+
+/* ═══════════ RECEIPT STRIP — the signature ═══════════
+   No figure without its provenance. Every stat carries
+   the file or deployment it was read from. */
+.receipt{
+  margin-top:clamp(52px,7vw,84px);
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  display:grid; grid-template-columns:repeat(4,1fr);
+}
+@media(max-width:860px){ .receipt{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:460px){ .receipt{ grid-template-columns:1fr; } }
+
+.receipt-cell{
+  padding:22px 22px 20px; border-right:1px solid var(--line-soft);
+  display:flex; flex-direction:column;
+}
+.receipt-cell:last-child{ border-right:0; }
+@media(max-width:860px){
+  .receipt-cell:nth-child(2n){ border-right:0; }
+  .receipt-cell:nth-child(-n+2){ border-bottom:1px solid var(--line-soft); }
+}
+@media(max-width:460px){
+  .receipt-cell{ border-right:0; border-bottom:1px solid var(--line-soft); }
+  .receipt-cell:last-child{ border-bottom:0; }
+}
+.r-fig{
+  font-family:var(--mono); font-size:clamp(26px,3.4vw,34px); font-weight:600;
+  color:var(--paper); letter-spacing:-.02em; line-height:1;
+}
+.r-what{
+  font-size:14.5px; color:var(--paper-3); margin-top:9px; line-height:1.42; flex:1;
+}
+.r-src{
+  font-family:var(--mono); font-size:10px; letter-spacing:.06em;
+  color:var(--paper-4); margin-top:14px; padding-top:9px;
+  border-top:1px dashed var(--line); text-transform:uppercase;
+}
+
+/* ═══════════ WORK INDEX ═══════════ */
+.index-tbl{ width:100%; border-collapse:collapse; margin-top:34px; }
+.index-tbl th{
+  font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--paper-4); text-align:left;
+  padding:0 14px 12px 0; border-bottom:1px solid var(--line);
+}
+.index-tbl td{
+  padding:13px 14px 13px 0; border-bottom:1px solid var(--line-soft);
+  font-size:14.5px; color:var(--paper-3); vertical-align:middle;
+}
+.index-tbl tr{ transition:background .16s; }
+.index-tbl tbody tr:hover{ background:var(--ink-raise); }
+.index-tbl a.ix-name{
+  font-family:var(--display); font-variation-settings:'wdth' 88;
+  font-weight:700; font-size:16px; color:var(--paper); text-decoration:none;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.index-tbl a.ix-name::after{
+  content:"↓"; font-family:var(--mono); font-size:12px; color:var(--amber);
+  opacity:0; transform:translateY(-2px); transition:all .18s;
+}
+.index-tbl tbody tr:hover a.ix-name::after{ opacity:1; transform:translateY(0); }
+.ix-stack{ font-family:var(--mono); font-size:12px; color:var(--paper-4); }
+.ix-scale{ font-family:var(--mono); font-size:12.5px; color:var(--paper-2); white-space:nowrap; }
+@media(max-width:820px){ .ix-hide{ display:none; } }
+
+.tagp{
+  font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:.07em;
+  text-transform:uppercase; padding:3px 9px; border-radius:2px; white-space:nowrap;
+  border:1px solid;
+}
+.t-live{ color:var(--live); background:var(--live-soft); border-color:#BEDCCC; }
+.t-ship{ color:var(--amber); background:var(--amber-soft); border-color:var(--amber-line); }
+.t-rnd { color:var(--paper-3); background:var(--ink-raise2); border-color:var(--line); }
+
+/* ═══════════ PROJECT ═══════════ */
+.proj{
+  border-top:1px solid var(--line);
+  padding:clamp(40px,5.4vw,64px) 0;
+  display:grid; grid-template-columns:250px 1fr; gap:clamp(24px,4.5vw,58px);
+  scroll-margin-top:78px;
+}
+@media(max-width:900px){ .proj{ grid-template-columns:1fr; gap:24px; } }
+
+.rail{ position:sticky; top:96px; align-self:start; }
+@media(max-width:900px){ .rail{ position:static; } }
+.rail-n{
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--amber);
+  margin-bottom:16px;
+}
+.rail-row{ margin-bottom:16px; }
+.rail-row h4{
+  font-family:var(--mono); font-size:9.5px; font-weight:500; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--paper-4); margin-bottom:5px;
+}
+.rail-row p{ font-size:13.5px; color:var(--paper-2); line-height:1.5; }
+.rail-row p.mono{ font-size:12px; color:var(--paper-3); line-height:1.58; }
+.rail-fig{
+  font-family:var(--mono); font-size:27px; font-weight:600; color:var(--paper);
+  letter-spacing:-.02em; line-height:1.05;
+}
+.rail-fig small{
+  display:block; font-family:var(--serif); font-size:13px; font-weight:400;
+  color:var(--paper-4); letter-spacing:0; margin-top:5px; line-height:1.4;
+}
+
+.proj-head{ display:flex; flex-wrap:wrap; align-items:baseline; gap:12px; margin-bottom:6px; }
+.proj-head h3{
+  font-family:var(--display); font-variation-settings:'wdth' 96;
+  font-size:clamp(25px,3.3vw,34px); font-weight:800; letter-spacing:-.024em;
+  color:var(--paper); line-height:1.08;
+}
+.proj-role{
+  font-size:16px; color:var(--paper-3); font-style:italic; margin-bottom:20px;
+}
+.proj-body p{ margin-bottom:15px; max-width:62ch; color:var(--paper-2); }
+.proj-body p:last-of-type{ margin-bottom:0; }
+.proj-body strong{ color:var(--paper); font-weight:600; }
+.proj-body em{ color:var(--paper); font-style:italic; }
+.proj-body code{
+  font-family:var(--mono); font-size:.85em; color:var(--amber);
+  background:var(--amber-soft); border:1px solid var(--amber-line);
+  padding:1px 5px; border-radius:2px;
+}
+.proj-body a.live{
+  color:var(--amber); text-decoration:none; border-bottom:1px solid var(--amber-line);
+}
+.proj-body a.live:hover{ border-bottom-color:var(--amber); }
+
+/* a claim that carries its receipt */
+.claim{
+  border-left:2px solid var(--amber); background:var(--ink-raise);
+  padding:15px 18px; margin:20px 0; max-width:62ch;
+}
+.claim .c-fig{
+  font-family:var(--mono); font-size:15px; font-weight:600; color:var(--paper);
+  display:block; margin-bottom:5px;
+}
+.claim .c-src{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--paper-4); margin-top:9px;
+  padding-top:8px; border-top:1px dashed var(--line); display:block;
+}
+.claim p{ font-size:14.5px !important; color:var(--paper-3); margin:0 !important; }
+
+.chips{ display:flex; flex-wrap:wrap; gap:6px; margin-top:22px; }
+.chip{
+  font-family:var(--mono); font-size:11px; color:var(--paper-3);
+  border:1px solid var(--line); padding:4px 9px; border-radius:2px;
+  background:var(--ink-raise);
+}
+
+/* ═══════════ METHOD / PRINCIPLES ═══════════ */
+.cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line); margin-top:38px; border:1px solid var(--line); }
+@media(max-width:780px){ .cards{ grid-template-columns:1fr; } }
+.card{ background:var(--ink); padding:28px 26px; }
+.card h4{
+  font-family:var(--display); font-variation-settings:'wdth' 92;
+  font-size:19px; font-weight:700; color:var(--paper); margin-bottom:9px; letter-spacing:-.014em;
+}
+.card p{ font-size:15px; color:var(--paper-3); line-height:1.58; }
+.card p strong{ color:var(--paper-2); font-weight:600; }
+.card code{
+  font-family:var(--mono); font-size:.84em; color:var(--amber);
+  background:var(--amber-soft); padding:1px 5px; border-radius:2px;
+}
+.card em{ color:var(--paper-2); }
+
+/* ═══════════ CONTACT ═══════════ */
+.contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(30px,5vw,68px); margin-top:38px; }
+@media(max-width:840px){ .contact-grid{ grid-template-columns:1fr; } }
+
+.c-line{ border-top:1px solid var(--line); padding:16px 0; display:flex; gap:18px; align-items:baseline; }
+.c-line dt{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--paper-4); width:76px; flex-shrink:0;
+}
+.c-line dd{ font-size:15.5px; color:var(--paper); }
+.c-line dd a{ color:var(--amber); text-decoration:none; border-bottom:1px solid var(--amber-line); }
+.c-line dd a:hover{ border-bottom-color:var(--amber); }
+.c-line dd small{ display:block; font-family:var(--mono); font-size:11px; color:var(--paper-4); margin-top:4px; letter-spacing:.03em; }
+
+form{ display:flex; flex-direction:column; gap:15px; }
+.field label{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--paper-4); display:block; margin-bottom:7px;
+}
+.field input, .field textarea{
+  width:100%; background:var(--ink-raise); border:1px solid var(--line);
+  color:var(--paper); font-family:var(--serif); font-size:15.5px;
+  padding:11px 13px; border-radius:2px; transition:border-color .18s;
+}
+.field textarea{ resize:vertical; min-height:118px; line-height:1.55; }
+.field input:focus, .field textarea:focus{ outline:none; border-color:var(--amber); }
+.field input::placeholder, .field textarea::placeholder{ color:var(--paper-4); opacity:.7; }
+.hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+button.send{
+  font-family:var(--mono); font-size:13px; font-weight:500; cursor:pointer;
+  background:var(--amber); color:var(--ink); border:1px solid var(--amber);
+  padding:12px 24px; border-radius:2px; align-self:flex-start; transition:background .18s;
+}
+button.send:hover:not(:disabled){ background:#6B5423; }
+button.send:disabled{ opacity:.55; cursor:not-allowed; }
+.form-note{
+  font-family:var(--mono); font-size:11.5px; color:var(--paper-4);
+  line-height:1.5; letter-spacing:.02em;
+}
+.form-note[data-state="ok"]{ color:var(--live); }
+.form-note[data-state="err"]{ color:#A3392A; }
+
+/* ═══════════ FOOTER ═══════════ */
+footer{ border-top:1px solid var(--line); padding:34px 0 46px; }
+.foot-in{
+  display:flex; flex-wrap:wrap; justify-content:space-between; gap:14px;
+  font-family:var(--mono); font-size:11.5px; color:var(--paper-4); letter-spacing:.04em;
+}
+.foot-in a{ color:var(--paper-3); text-decoration:none; }
+.foot-in a:hover{ color:var(--amber); }
+
+/* ═══════════ MOTION ═══════════
+   Content is visible by default. The reveal only arms itself once
+   JS has set .js on <html>, so a script failure can never leave
+   the page blank. */
+.js .rise{ opacity:0; transform:translateY(16px); transition:opacity .62s cubic-bezier(.2,.7,.3,1), transform .62s cubic-bezier(.2,.7,.3,1); }
+.js .rise.in{ opacity:1; transform:none; }
+@media (prefers-reduced-motion:reduce){
+  .js .rise{ opacity:1 !important; transform:none !important; transition:none !important; }
+}
+</style>
+</head>
+<body>
+<script>
+  // Arm the scroll reveal only when JS is running and motion is welcome.
+  // Without this the page renders fully visible, which is the safe default.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.className += ' js';
+  }
+</script>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top">
+      <img class="brand-mark" src="assets/logo-mark-onlight.png" alt="" width="314" height="256">
+      Hec<span>Tech</span>
+    </a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#background">Background</a>
+      <a href="#method">Method</a>
+      <a href="#contact">Contact</a>
+      
+      <a class="nav-cta" href="assets/Hector_Aryiku_Engineering_Portfolio.pdf" download>Portfolio PDF</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-grid">
+      <figure class="portrait rise">
+        <img src="assets/hector.jpg" alt="Hector Aryiku" width="360" height="360">
+        <figcaption>Accra · GH</figcaption>
+      </figure>
+      <div>
+        <h1 class="rise">Software that keeps working when the <em>network doesn't.</em></h1>
+        <p class="hero-sub rise">
+          I teach Cambridge Computing and Mathematics at a school in Accra and build the software that school runs
+          on — timetabling, grading, diagnostics — then keep going into the systems underneath:
+          constraint solvers, native desktop apps that talk to hardware directly, and a draughts
+          engine written in Rust. I am the domain expert and the engineer, which is why the
+          modelling is precise.
+        </p>
+        <div class="hero-id rise">
+          <span><b>Hector Aryiku</b></span>
+          <span>Systems &amp; Full-Stack Product Engineer</span>
+          <span>Accra, Ghana · remote</span>
+        </div>
+        <div class="hero-actions rise">
+          <a class="btn btn-primary" href="#work">See the work</a>
+          <a class="btn btn-ghost" href="assets/Hector_Aryiku_Engineering_Portfolio.pdf" download>Download PDF ↓</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIGNATURE: no figure without its provenance -->
+    <div class="receipt rise">
+      <div class="receipt-cell">
+        <div class="r-fig">&lt;3 min</div>
+        <div class="r-what">to place 615 curriculum periods across 14 classes and 39 teachers, with no unplaced lessons and no hard conflicts</div>
+        <div class="r-src">EduScheduler · measured run, v1.0.0</div>
+      </div>
+      <div class="receipt-cell">
+        <div class="r-fig">5 yrs</div>
+        <div class="r-what">teaching the curriculum my software serves, in the classrooms it runs in</div>
+        <div class="r-src">St. Adelaide Int. Schools · since 2021</div>
+      </div>
+      <div class="receipt-cell">
+        <div class="r-fig">~95k</div>
+        <div class="r-what">lines of source in the largest codebase, excluding dependencies</div>
+        <div class="r-src">BaseCamp · measured 2026-09</div>
+      </div>
+      <div class="receipt-cell">
+        <div class="r-fig">1</div>
+        <div class="r-what">published performance claim I retracted after finding the benchmark was wrong</div>
+        <div class="r-src">Victor · README, in repo</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ WORK ═══════════ -->
+<section id="work">
+  <div class="wrap">
+    <div class="eyebrow rise">Work — ten systems</div>
+    <h2 class="sec-title rise">Built, shipped, and measured.</h2>
+    <p class="sec-lede rise">
+      Every figure below was read from the codebase or a live deployment, not estimated.
+      Where something is unverified, it says so.
+    </p>
+
+    <table class="index-tbl rise">
+      <thead>
+        <tr>
+          <th>System</th>
+          <th class="ix-hide">Domain</th>
+          <th class="ix-hide">Stack</th>
+          <th>Scale</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><a class="ix-name" href="#basecamp">BaseCamp Diagnostics</a></td><td class="ix-hide">AI learning-gap diagnostics</td><td class="ix-hide ix-stack">React 19 · Firebase · Gemini</td><td class="ix-scale">~95k LOC</td><td><span class="tagp t-ship">Pilot</span></td></tr>
+        <tr><td><a class="ix-name" href="#sais">SAIS Portal</a></td><td class="ix-hide">School information system</td><td class="ix-hide ix-stack">React · Vite · Firebase</td><td class="ix-scale">5 yrs data</td><td><span class="tagp t-live">Live</span></td></tr>
+        <tr><td><a class="ix-name" href="#eduscheduler">EduScheduler Pro</a></td><td class="ix-hide">Constraint-solving timetables</td><td class="ix-hide ix-stack">Tauri v2 · React 18</td><td class="ix-scale">~72k LOC</td><td><span class="tagp t-ship">v1.0.0</span></td></tr>
+        <tr><td><a class="ix-name" href="#nexus">Nexus Inventory</a></td><td class="ix-hide">Native POS &amp; thermal printing</td><td class="ix-hide ix-stack">Rust · Tauri v2</td><td class="ix-scale">127 tests</td><td><span class="tagp t-ship">Delivered</span></td></tr>
+        <tr><td><a class="ix-name" href="#victor">Victor Draughts Engine</a></td><td class="ix-hide">Game AI: search, NNUE</td><td class="ix-hide ix-stack">Rust · WASM · PyTorch</td><td class="ix-scale">~30k LOC</td><td><span class="tagp t-rnd">Jan 2027</span></td></tr>
+        <tr><td><a class="ix-name" href="#compliance">Academic Compliance</a></td><td class="ix-hide">AI lesson-plan auditing</td><td class="ix-hide ix-stack">React · Firebase · Gemini</td><td class="ix-scale">10 depts</td><td><span class="tagp t-live">Live</span></td></tr>
+        <tr><td><a class="ix-name" href="#reportgen">HecTech Report Generator</a></td><td class="ix-hide">AI report cards in Sheets</td><td class="ix-hide ix-stack">Apps Script · Gemini</td><td class="ix-scale">39 sheets</td><td><span class="tagp t-live">Live</span></td></tr>
+        <tr><td><a class="ix-name" href="#quant">QuantSports Engine</a></td><td class="ix-hide">Quantitative odds research</td><td class="ix-hide ix-stack">TypeScript · Vite</td><td class="ix-scale">Backtested</td><td><span class="tagp t-rnd">Research</span></td></tr>
+        <tr><td><a class="ix-name" href="#doxamix">Doxamix Foods</a></td><td class="ix-hide">Full-stack e-commerce &amp; admin</td><td class="ix-hide ix-stack">React 19 · Firebase · Functions</td><td class="ix-scale">26 tests</td><td><span class="tagp t-live">Live</span></td></tr>
+        <tr><td><a class="ix-name" href="#ludo">3D Ludo Engine</a></td><td class="ix-hide">Real-time 3D multiplayer</td><td class="ix-hide ix-stack">Three.js · React 19 · ws</td><td class="ix-scale">WebGL</td><td><span class="tagp t-ship">Playable</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ PROJECTS ═══════════ -->
+<div class="wrap">
+
+  <!-- 1 · BaseCamp -->
+  <article class="proj rise" id="basecamp">
+    <aside class="rail">
+      <div class="rail-n">01 / 10</div>
+      <div class="rail-row"><div class="rail-fig">~95k<small>lines of source</small></div></div>
+      <div class="rail-row"><h4>Stack</h4><p class="mono">React 19 · TypeScript · Firebase Auth / Firestore / Functions · Gemini · idb-keyval · KaTeX</p></div>
+      <div class="rail-row"><h4>Role</h4><p>Sole architect and engineer. I also teach the numeracy curriculum it diagnoses against.</p></div>
+      <div class="rail-row"><h4>Recognition</h4><p>UNICEF StartUp Lab — Learning Gaps Challenge. Certificate of Participation, March 2026.</p></div>
+    </aside>
+    <div class="proj-body">
+      <div class="proj-head"><h3>BaseCamp Diagnostics</h3><span class="tagp t-ship">Pilot</span></div>
+      <p class="proj-role">AI-assisted learning-gap diagnostics for classrooms with unreliable connectivity</p>
+      <p>
+        A teacher photographs a pupil's worksheet, dictates an observation, or types a rubric entry.
+        <strong>Gemini multimodal analysis</strong> reads the handwritten work and the audio reasoning,
+        identifies the specific misconception behind a wrong answer rather than just marking it wrong,
+        and returns a diagnostic report with a targeted lesson plan and a parent SMS draft.
+      </p>
+      <p>
+        The hard constraint is that the classrooms it was designed for do not have reliable internet.
+        <strong>Offline is the default path, not a fallback.</strong> Assessments and voice clips are written
+        to IndexedDB queues and reconciled by dedicated sync managers when an uplink returns, so a
+        connection dropping mid-upload loses nothing and the teacher is never blocked waiting on a network.
+      </p>
+      <p>
+        Access is scoped by <code>organizationId</code> and <code>schoolId</code> across six roles — teacher,
+        headteacher, org admin, SEN coordinator, school admin and super admin — so a school network sees
+        its own branches and nothing else. <strong>Campus Gap Analysis</strong> aggregates learning-gap
+        prevalence across branches for network leadership, and an <strong>SEN inbox</strong> routes screening
+        alerts raised automatically during analysis to the coordinator responsible for them.
+      </p>
+      <p>
+        Composite Firestore indexes are version-controlled and deployed from the repository rather than
+        clicked together in the console, so the index definitions survive an environment rebuild. Pupil
+        "show your work" uploads are handled out of band by a Cloud Storage trigger, and media handling is
+        tuned for the low-specification tablets these classrooms actually have, so adopting it costs a
+        school nothing in new hardware.
+      </p>
+      <div class="chips">
+        <span class="chip">React 19</span><span class="chip">TypeScript</span><span class="chip">Gemini Multimodal</span>
+        <span class="chip">Firestore</span><span class="chip">Cloud Functions</span><span class="chip">IndexedDB</span>
+        <span class="chip">Offline Sync</span><span class="chip">RBAC</span><span class="chip">KaTeX</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- 2 · SAIS Portal -->
+  <article class="proj rise" id="sais">
+    <aside class="rail">
+      <div class="rail-n">02 / 10</div>
+      <div class="rail-row"><div class="rail-fig">5 yrs<small>of archived academic records, 2021–2026</small></div></div>
+      <div class="rail-row"><h4>Stack</h4><p class="mono">React · Vite · TypeScript · Firebase Hosting / Auth / Firestore / Functions · Gemini · JSZip · WhatsApp Cloud API</p></div>
+      <div class="rail-row"><h4>Live</h4><p class="mono">sais-portal.web.app</p></div>
+      <div class="rail-row"><h4>Users</h4><p>Teachers and leadership at St. Adelaide International Schools, primary and secondary</p></div>
+    </aside>
+    <div class="proj-body">
+      <div class="proj-head"><h3>SAIS Portal</h3><span class="tagp t-live">Live</span></div>
+      <p class="proj-role">Production school information system, grading engine and report-card pipeline</p>
+      <p>
+        Running in production at
+        <a class="live" href="https://sais-portal.web.app" target="_blank" rel="noopener">sais-portal.web.app</a>.
+        Teachers enter marks, leadership runs the school, and parents receive report cards — the whole
+        chain, with the grading mathematics treated as a specification rather than an implementation detail.
+      </p>
+      <p>
+        <strong>The grading grid had to stop losing keystrokes.</strong> The master sheet replaced linear
+        array scans with an <code>O(1)</code> hash-map lookup, isolated every cell behind
+        <code>React.memo</code> with local state buffering, and added focus tracking so a background
+        context sync can never overwrite the cell a teacher is currently typing in. Unmount flush handlers
+        catch the last edit when someone navigates away fast.
+      </p>
+      <div class="claim">
+        <span class="c-fig">Averages divide by subjects actually assessed</span>
+        <p>A pupil who transferred mid-year is not penalised for marks that were never taken. Two-decimal precision and deterministic competition ranking (1st, 2nd, 2nd, 4th) are enforced identically across analytics and printed reports.</p>
+        <span class="c-src">Verified in source · grading engine</span>
+      </div>
+      <p>
+        <strong>Authorisation lives on the server.</strong> Term locks are enforced in Firestore security
+        rules as well as in the client, and the signed-in role is resolved from a server-side whitelist
+        collection — never from <code>localStorage</code>, which any user can edit. The client check is a
+        convenience; the rules are the boundary.
+      </p>
+      <p>
+        Five academic years were ingested from historical CSVs with alumni auto-registration and archived
+        behind read-only role locks with an explicit headteacher override. A three-way inconsistency in
+        how years were stored got unified into one canonical <code>YYYY-YYYY</code> form with a documented
+        invariant, because comparing two year strings raw had been a recurring source of bugs.
+      </p>
+      <p>
+        Bulk PDF generation explicitly releases canvas GPU memory and unmounts React roots in a
+        <code>finally</code> block, then packages a whole class into a single ZIP with browser yielding —
+        which avoids both the memory leak and the multi-download popup block. Parent delivery over the
+        WhatsApp Cloud API records what actually happened via webhook rather than trusting a
+        <code>200</code> response, and inbound replies are stored for a human to read. A "STOP" is never
+        acted on automatically, because withholding a child's report card would be the wrong outcome.
+      </p>
+      <div class="chips">
+        <span class="chip">React</span><span class="chip">Firebase</span><span class="chip">Firestore Rules</span>
+        <span class="chip">Gemini API</span><span class="chip">WhatsApp Cloud API</span><span class="chip">JSZip</span>
+        <span class="chip">RBAC</span><span class="chip">Performance</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- 3 · EduScheduler -->
+  <article class="proj rise" id="eduscheduler">
+    <aside class="rail">
+      <div class="rail-n">03 / 10</div>
+      <div class="rail-row"><div class="rail-fig">&lt;3 min<small>to place 615 curriculum periods a week with zero conflicts</small></div></div>
+      <div class="rail-row"><h4>Stack</h4><p class="mono">Tauri v2 (Rust shell) · React 18 · TypeScript · Tailwind · Web Workers · ExcelJS · Ed25519</p></div>
+      <div class="rail-row"><h4>Verification</h4><p class="mono">Vitest · Playwright E2E · GitHub Actions (lint · format · typecheck · coverage · build · E2E)</p></div>
+      <div class="rail-row"><h4>Status</h4><p>v1.0.0, released for delivery. Offline, no server, no telemetry.</p></div>
+    </aside>
+    <div class="proj-body">
+      <div class="proj-head"><h3>EduScheduler Pro</h3><span class="tagp t-ship">v1.0.0</span></div>
+      <p class="proj-role">Multi-constraint timetable, exam and duty-roster generator sold as a one-time purchase</p>
+      <p>
+        Academic timetabling is a constraint satisfaction problem over teachers, rooms, class groups and
+        curriculum splits. The solver is a hybrid: <strong>dynamic minimum-remaining-values ordering with
+        backtracking</strong>, so it always assigns the most constrained slot next and unwinds cleanly when
+        a branch dead-ends. It runs <strong>inside a Web Worker</strong>, so the interface stays responsive
+        while it searches. When it cannot place something it reports the unplaced lesson and the curriculum
+        gap explicitly, rather than silently dropping them and producing a timetable that looks complete.
+      </p>
+      <p>
+        <strong>Divisions were the hard part.</strong> Schools that run more than one bell schedule — a
+        nursery section and a senior section on different day structures — break any scheduler that compares
+        period indices, because period 3 is not the same hour in both. Conflict detection was rebuilt to
+        compare <em>real clock times</em>, and that change had to propagate through the generator, the exam
+        rosters and duty assignment alike.
+      </p>
+      <div class="claim">
+        <span class="c-fig">14 classes · 39 teachers · 615 periods · 0 unplaced · under 3 minutes</span>
+        <p>Measured on the Dansoman campus export: 39 of the school’s 55 teachers, because the nursery department’s timetable was already fixed and was excluded from the run. No unplaced lessons, no curriculum gaps, no hard conflicts, and the whole timetable solved in roughly 270 seconds. The fixture is kept out of version control because it contains real staff data, which means CI cannot run this gate — so it is documented as a manual step before any release.</p>
+        <span class="c-src">EduScheduler v1.0.0 · measured run on a real school export</span>
+      </div>
+      <p>
+        <strong>Multiple weeks of manual work became under three minutes of search</strong> — and it
+        removed the residual room and staff clashes that had survived the manual process anyway. That
+        ratio, not the raw speed, is the argument for solving this as a constraint problem.
+      </p>
+      <p>
+        <strong>Offline licensing with real cryptography.</strong> Activation verifies an
+        <code>Ed25519</code>-signed licence key against a public key embedded in the binary, with a
+        keypair-generation and key-minting toolchain behind it. No account, no server call, and a tampered
+        key is refused. The trade-off is that if the embedded key and the signing key ever disagree, every
+        key issued is rejected and there is no update channel to correct it — so that check is on the
+        pre-delivery list.
+      </p>
+      <p>
+        Automatic restore points with undo/redo mean a destructive edit is recoverable without anyone
+        having remembered to export a backup — and the restore is itself undoable, because the pre-restore
+        state is captured first. Diagnostic tooling ships alongside: smoke tests, benchmarks, an
+        unplaced-lesson explainer, clock-overlap detection and room-utilisation analysis. Exported problem
+        reports carry <strong>counts only — no staff, class, room or school names</strong> — so a school can
+        send one without sending its data.
+      </p>
+      <div class="chips">
+        <span class="chip">Rust</span><span class="chip">Tauri v2</span><span class="chip">React 18</span>
+        <span class="chip">TypeScript</span><span class="chip">Constraint Solving</span><span class="chip">Web Workers</span>
+        <span class="chip">Ed25519</span><span class="chip">ExcelJS</span><span class="chip">Playwright</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- 4 · Nexus -->
+  <article class="proj rise" id="nexus">
+    <aside class="rail">
+      <div class="rail-n">04 / 10</div>
+      <div class="rail-row"><div class="rail-fig">127<small>Vitest tests, plus typecheck and cargo gates</small></div></div>
+      <div class="rail-row"><h4>Stack</h4><p class="mono">Rust · Tauri v2 · React 19 · TanStack Router / Query / Table · rusqlite · aes-gcm · nusb · Radix UI</p></div>
+      <div class="rail-row"><h4>Targets</h4><p>Windows desktop shipped. Android scaffolded, signing outstanding.</p></div>
+      <div class="rail-row"><h4>Status</h4><p>Built to order for a named retail client in Ghana</p></div>
+    </aside>
+    <div class="proj-body">
+      <div class="proj-head"><h3>Nexus Inventory</h3><span class="tagp t-ship">Delivered</span></div>
+      <p class="proj-role">Stock ledger, point of sale and direct thermal-receipt printing, built natively in Rust</p>
+      <p>
+        <strong>Thermal printing with no vendor driver.</strong> ESC/POS command bytes are assembled in Rust
+        and sent two ways: over raw TCP to a network printer on port <code>9100</code> with a connect
+        timeout, and over <strong>USB bulk transfer via <code>nusb</code></strong>, with device enumeration
+        and endpoint discovery done by hand. No print spooler, no third-party SDK, no driver install on the
+        shop's machine.
+      </p>
+      <p>
+        Underneath is a native Rust IPC data layer over <code>rusqlite</code> in <strong>WAL journal
+        mode</strong>, with foreign keys enforced and a busy timeout set, carried through seven versioned
+        schema migrations. Each migration is gated on <code>PRAGMA user_version</code> and wrapped in a
+        transaction that rolls back on failure, ending at a <code>sync_queue</code> with retry accounting
+        built for cloud replication.
+      </p>
+      <div class="claim">
+        <span class="c-fig">The SQL bridge is allow-listed</span>
+        <p>Queries crossing the IPC boundary are validated before execution. <code>DROP</code> is permitted only for the views that migrations legitimately recreate, and <code>PRAGMA</code> is restricted to four known-safe pragmas. Anything else is refused rather than passed through to SQLite.</p>
+        <span class="c-src">src-tauri/src/lib.rs · read in source</span>
+      </div>
+      <p>
+        Local backups are encrypted with <strong>AES-256-GCM</strong> using a per-backup random salt for key
+        derivation and a fresh 12-byte nonce, with both prefixed to the ciphertext so a backup file is
+        self-describing. PIN-based authentication with role-based access control covers the shop floor, and
+        the purchase-order flow composes an order message for WhatsApp rather than embedding a fragile
+        integration that would break the first time Meta changed something.
+      </p>
+      <p>
+        Built on Tauri rather than Electron so the app uses the system webview instead of bundling a
+        Chromium runtime — a deliberate trade of ecosystem convenience for install size and memory
+        headroom on the low-spec Windows machines this has to run on.
+      </p>
+      <div class="chips">
+        <span class="chip">Rust</span><span class="chip">Tauri v2</span><span class="chip">React 19</span>
+        <span class="chip">rusqlite / WAL</span><span class="chip">ESC/POS</span><span class="chip">nusb (USB)</span>
+        <span class="chip">AES-256-GCM</span><span class="chip">TanStack</span><span class="chip">Android</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- 5 · Victor -->
+  <article class="proj rise" id="victor">
+    <aside class="rail">
+      <div class="rail-n">05 / 10</div>
+      <div class="rail-row"><div class="rail-fig">~30k<small>lines of Rust, Python and TypeScript</small></div></div>
+      <div class="rail-row"><h4>Engine</h4><p class="mono">Rust → native + WebAssembly · bitboards · alpha-beta with PVS · Zobrist transposition tables · quiescence search</p></div>
+      <div class="rail-row"><h4>Learning</h4><p class="mono">PyTorch NNUE training · int16 quantisation-aware export · ≤5-piece retrograde tablebase</p></div>
+      <div class="rail-row"><h4>Release</h4><p>Engine, tooling and client complete. NNUE network still in training — public launch targeted <strong style="color:var(--amber)">January 2027</strong>.</p></div>
+    </aside>
+    <div class="proj-body">
+      <div class="proj-head"><h3>Victor — Ghanaian Damii Draughts Engine</h3><span class="tagp t-rnd">Jan 2027</span></div>
+      <p class="proj-role">A full engine, training pipeline and client for a 10×10 variant that had no engine</p>
+      <p>
+        <strong>The rules are the specification, and the tests pin them.</strong> Ghanaian Damii differs
+        from international draughts in ways that change the search itself: mandatory capture but
+        <em>free choice</em> — the maximum-capture rule is disabled, so a player may take any available
+        path regardless of how many pieces it wins. Men capture backwards. Kings fly. There is no
+        mid-capture promotion. And a player loses immediately when their piece count drops below two,
+        which cuts off long king chases. Each of the seven rules is named by the test that enforces it.
+      </p>
+      <p>
+        The board is <strong>horizontally mirrored</strong> relative to FMJD notation. I documented why
+        that is a display convention rather than a symmetry: a true horizontal reflection flips square
+        parity and maps dark squares onto light ones, so the board's real symmetry is a 180° rotation with
+        colour swap. The mirror helper is marked display-only and <strong>must never be used for data
+        augmentation</strong> — doing so would have silently poisoned the training set with illegal positions.
+      </p>
+      <p>
+        <strong>NNUE evaluation, trained end to end.</strong> Self-play data generation writes a dense
+        40-byte packed record per position, grouped by game id so splits happen per game rather than per
+        position — consecutive plies of one game are near-duplicates, and splitting naively would leak
+        across train and validation. Weights quantise to int16 with quantisation-aware clamping during
+        training, and every weight file carries a version header so an architecture mismatch is rejected
+        rather than silently misread.
+      </p>
+      <div class="claim">
+        <span class="c-fig">A published Elo claim, withdrawn in the repository</span>
+        <p>I had reported the network as roughly 100 Elo weaker than the hand-crafted evaluator. On re-examination the benchmark had been measuring the hand-crafted evaluator against <em>itself</em>, because the engine silently fell back when no trained weights were present. The figure is retracted in the README, the fallback path is now unreachable from a search, and the benchmark exits rather than reporting a comparison it cannot make. Perft baselines are likewise labelled as not externally validated.</p>
+        <span class="c-src">README.md &amp; ARCHITECTURE.md · in repo</span>
+      </div>
+      <p>
+        A <strong>≤5-piece endgame tablebase</strong> solved by retrograde analysis covers the 2v2 and 3v2
+        tiers — 18 million positions in the 2v2 tier alone. Under the death check a side below two pieces
+        has already lost, so 2v2 is the smallest tier that means anything. The WASM bundle is size-tuned
+        separately from the native profile at <strong>337 KB</strong>, and runs in a Web Worker so browser
+        play never blocks the UI thread.
+      </p>
+      <div class="chips">
+        <span class="chip">Rust</span><span class="chip">WebAssembly</span><span class="chip">Bitboards</span>
+        <span class="chip">Alpha-Beta / PVS</span><span class="chip">Zobrist TT</span><span class="chip">NNUE</span>
+        <span class="chip">PyTorch</span><span class="chip">Endgame Tablebases</span><span class="chip">Web Workers</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- 6 · Academic Compliance -->
+  <article class="proj rise" id="compliance">
+    <aside class="rail">
+      <div class="rail-n">06 / 10</div>
+      <div class="rail-row"><div class="rail-fig">10<small>subject departments with their own rubrics</small></div></div>
+      <div class="rail-row"><h4>Stack</h4><p class="mono">React · Firebase · Gemini · IndexedDB · WhatsApp Cloud API</p></div>
+      <div class="rail-row"><h4>Live</h4><p class="mono">sais-lessons.web.app</p></div>
+      <div class="rail-row"><h4>Status</h4><p>Live for teachers at St. Adelaide International School</p></div>
+    </aside>
+    <div class="proj-body">
+      <div class="proj-head"><h3>Academic Compliance</h3><span class="tagp t-live">Live</span></div>
+      <p class="proj-role">Lesson-plan auditing against the Cambridge planning standard</p>
+      <p>
+        Live at
+        <a class="live" href="https://sais-lessons.web.app" target="_blank" rel="noopener">sais-lessons.web.app</a>.
+        Teachers upload a weekly lesson plan as <code>.pdf</code> or <code>.docx</code>; it is audited
+        against <strong>Cambridge lesson-planning standards</strong> across ten subject departments, with a
+        general pedagogical rubric as fallback for subjects outside them, then banded and routed to the
+        right head of department.
+      </p>
+      <p>
+        Cited syllabus codes are checked against the class's actual stage — an out-of-stage citation caps
+        the score — and a deterministic guard catches an unfilled template before it ever reaches the
+        model, because paying for an AI call to discover a blank document is waste. A
+        <strong>three-band compliance gate</strong> clears at 76% and keeps the two bands below it distinct,
+        because 64–75% and below-64% say different things to a teacher. Those thresholds live in one
+        constants module that the UI reads, rather than being hardcoded at each call site.
+      </p>
+      <div class="claim">
+        <span class="c-fig">A threshold is never moved to improve the pass rate</span>
+        <p>It changes only if the rubric is judged wrong on the pedagogy, and the reason and the decider are recorded. The rule is written into the repository's agent instructions, because this system decides whether a teacher's work is accepted.</p>
+        <span class="c-src">AGENTS.md · standing rule</span>
+      </div>
+      <p>
+        An IndexedDB offline queue means an upload survives a dropped connection. Teachers who have not
+        submitted get an automatic WhatsApp reminder, and leadership gets a weekly compliance report.
+      </p>
+      <div class="chips">
+        <span class="chip">React</span><span class="chip">Firebase</span><span class="chip">Gemini</span>
+        <span class="chip">IndexedDB</span><span class="chip">WhatsApp API</span><span class="chip">Cambridge Rubrics</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- 7 · Report Generator -->
+  <article class="proj rise" id="reportgen">
+    <aside class="rail">
+      <div class="rail-n">07 / 10</div>
+      <div class="rail-row"><div class="rail-fig">39<small>class spreadsheets across three campuses</small></div></div>
+      <div class="rail-row"><h4>Stack</h4><p class="mono">Google Apps Script · Gemini · Meta Graph API · Drive · clasp</p></div>
+      <div class="rail-row"><h4>Pattern</h4><p>Vault Library + Client Shell</p></div>
+      <div class="rail-row"><h4>Status</h4><p>Live, v2.4.0. In use across primary and secondary.</p></div>
+    </aside>
+    <div class="proj-body">
+      <div class="proj-head"><h3>HecTech AI Report Generator</h3><span class="tagp t-live">Live</span></div>
+      <p class="proj-role">Report cards generated, reviewed and delivered from inside Google Sheets</p>
+      <p>
+        A <strong>Vault Library + Client Shell</strong> architecture. The engine and credentials live in one
+        private library; each of thirty-nine classroom spreadsheets runs a thin shell bridge that routes UI
+        requests to it. IT can revoke a single spreadsheet from the Vault's authorisation registry without
+        touching the others, and credentials are isolated per sheet or campus rather than shared.
+      </p>
+      <p>
+        <strong>Auto-healing triggers defeat the Apps Script six-minute execution ceiling.</strong> A long
+        batch yields control before it times out and schedules a background trigger to resume itself, so
+        generating three hundred report cards does not require anyone to babysit it.
+      </p>
+      <p>
+        Most of the engineering here is hardening against the platform's failure modes: a cache-based
+        <strong>circuit breaker</strong> on the Gemini API so an outage cannot burn the execution quota,
+        formula-injection sanitising on every user-supplied string, a 30-minute OAuth token TTL with
+        cleanup on sheet open, and retry-with-backoff on Drive PDF conversion, which fails intermittently
+        at volume. Subjects are discovered dynamically from sheet headers rather than hardcoded per campus.
+      </p>
+      <div class="chips">
+        <span class="chip">Apps Script</span><span class="chip">Gemini</span><span class="chip">Meta Graph API</span>
+        <span class="chip">OAuth</span><span class="chip">clasp</span><span class="chip">Circuit Breaker</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- 8 · QuantSports -->
+  <article class="proj rise" id="quant">
+    <aside class="rail">
+      <div class="rail-n">08 / 10</div>
+      <div class="rail-row"><div class="rail-fig">0<small>bets placed — it is research tooling</small></div></div>
+      <div class="rail-row"><h4>Stack</h4><p class="mono">TypeScript · Vite · Vitest · multi-provider odds feeds</p></div>
+      <div class="rail-row"><h4>Method</h4><p>Backtested against historical price-and-result data</p></div>
+      <div class="rail-row"><h4>Status</h4><p>Research. Places no bets and gives no advice.</p></div>
+    </aside>
+    <div class="proj-body">
+      <div class="proj-head"><h3>QuantSports Engine</h3><span class="tagp t-rnd">Research</span></div>
+      <p class="proj-role">Measuring whether a pricing edge exists, and refusing to guess when it can't</p>
+      <p>
+        A research engine that measures whether a pricing edge exists on two bookmakers, anchoring their
+        lines against sharp consensus books and backtesting the result against historical price-and-result
+        data. It places no bets and offers no advice — it is instrumentation, not a product.
+      </p>
+      <div class="claim">
+        <span class="c-fig">The free-tier budget is enforced in code, not in discipline</span>
+        <p>A credit ledger refuses any sweep that would breach a monthly or daily allowance <em>before</em> a request is sent, and a dry-run mode prints the projected cost and remaining budget without spending anything.</p>
+        <span class="c-src">src/data/creditLedger.ts</span>
+      </div>
+      <p>
+        Providers are pluggable with an automatic fallback chain. More usefully, the
+        <strong>negative results are written down</strong>: one bookmaker returning nothing usable on
+        tier-one football is recorded as a measured finding with an identifier, not quietly routed around
+        and forgotten. A research tool whose failures are invisible is a research tool that will mislead you.
+      </p>
+      <div class="chips">
+        <span class="chip">TypeScript</span><span class="chip">Vite</span><span class="chip">Vitest</span>
+        <span class="chip">Backtesting</span><span class="chip">Rate Budgeting</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- 9 · Doxamix -->
+  <article class="proj rise" id="doxamix">
+    <aside class="rail">
+      <div class="rail-n">09 / 10</div>
+      <div class="rail-row"><div class="rail-fig">3<small>independent layers guarding stock, so a race cannot oversell</small></div></div>
+      <div class="rail-row"><h4>Stack</h4><p class="mono">React 19 · TypeScript · Firebase Firestore / Auth / Cloud Functions · Tailwind 4 · Recharts · Vitest</p></div>
+      <div class="rail-row"><h4>Live</h4><p class="mono">doxamix-foods.web.app</p></div>
+      <div class="rail-row"><h4>Status</h4><p>Live storefront and admin dashboard for a Ghanaian juice and food business</p></div>
+    </aside>
+    <div class="proj-body">
+      <div class="proj-head"><h3>Doxamix Foods</h3><span class="tagp t-live">Live</span></div>
+      <p class="proj-role">Full-stack e-commerce where the interesting problem is concurrency, not the shopfront</p>
+      <p>
+        A storefront and admin dashboard running at
+        <a class="live" href="https://doxamix-foods.web.app" target="_blank" rel="noopener">doxamix-foods.web.app</a>:
+        catalogue, cart, checkout and order tracking for customers; sales analytics, inventory and order
+        management for the owner. The shopfront is the easy half.
+      </p>
+      <p>
+        <strong>The real problem is two customers buying the last bottle at the same moment.</strong>
+        A naive read-then-write oversells, and an oversold order in a food business means a refund and a
+        lost customer. Stock is guarded in three independent places, each doing a different job.
+      </p>
+      <div class="claim">
+        <span class="c-fig">Client guard → Firestore transaction → security rules</span>
+        <p>The cart checks availability so the customer gets fast feedback. A <em>Cloud Function</em> then re-reads every product inside a <code>runTransaction</code>, rejects the whole order if any line is short, and writes all deductions atomically — so the check and the write cannot be split by a competing order. Firestore rules permit stock writes to admins only, so no client can reach the number directly. The client layer is convenience; the transaction is correctness; the rules are the boundary.</p>
+        <span class="c-src">functions/src/index.ts · read in source</span>
+      </div>
+      <p>
+        A rejected order is <strong>not silently dropped</strong>. It is written back as
+        <code>failed</code> with the reason that caused it — which product, stock available, quantity
+        requested — so the owner can see what happened and tell the customer something true.
+      </p>
+      <p>
+        Role-based access runs through Firestore security rules rather than UI state: the admin dashboard
+        and the business-sensitive collections behind it are gated server-side, and a customer can read
+        their own orders and nothing else. Twenty-six test files cover the cart, product management and
+        order flows.
+      </p>
+      <div class="chips">
+        <span class="chip">React 19</span><span class="chip">TypeScript</span><span class="chip">Firestore</span>
+        <span class="chip">Cloud Functions</span><span class="chip">Transactions</span><span class="chip">RBAC</span>
+        <span class="chip">Recharts</span><span class="chip">Vitest</span><span class="chip">Tailwind 4</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- 10 · 3D Ludo -->
+  <article class="proj rise" id="ludo">
+    <aside class="rail">
+      <div class="rail-n">10 / 10</div>
+      <div class="rail-row"><div class="rail-fig">3<small>modes sharing one rules core</small></div></div>
+      <div class="rail-row"><h4>Stack</h4><p class="mono">Three.js · React 19 · TypeScript · Vite · Express · WebSockets · Vitest</p></div>
+      <div class="rail-row"><h4>Rules</h4><p>The local variant, properly — ransom, line kicks, combo kicks</p></div>
+      <div class="rail-row"><h4>Status</h4><p>Playable</p></div>
+    </aside>
+    <div class="proj-body">
+      <div class="proj-head"><h3>3D Ludo Engine</h3><span class="tagp t-ship">Playable</span></div>
+      <p class="proj-role">Real-time 3D multiplayer board game with the rules people actually play by</p>
+      <p>
+        A WebGL board rendered in <strong>Three.js</strong> — marble slab, wooden framing, dynamic lighting
+        and an orbital camera with pinch-zoom and rotate gestures that work on a phone. Three modes share a
+        single rules core: local pass-and-play, CPU opponents with distinct strategies, and
+        <strong>online multiplayer over WebSockets</strong> with six-character room codes served by an
+        Express backend.
+      </p>
+      <p>
+        The part worth building was the rules. Most digital Ludo implements the international rule set,
+        which is not what anyone here actually plays. This one implements the local variant: a
+        <strong>ransom mechanism</strong> where captured pawns are held by the captor until redeemed, line
+        kicks that jump across the board on a six, and reverse combo kicks. A Vitest suite covers move
+        validation, captures and win conditions, because rule variants are exactly where an
+        implementation quietly drifts from what players expect.
+      </p>
+      <div class="chips">
+        <span class="chip">Three.js</span><span class="chip">React 19</span><span class="chip">WebGL</span>
+        <span class="chip">WebSockets</span><span class="chip">Express</span><span class="chip">Vitest</span>
+      </div>
+    </div>
+  </article>
+
+</div>
+
+<!-- ═══════════ METHOD ═══════════ -->
+<section id="method">
+  <div class="wrap">
+    <div class="eyebrow rise">Method</div>
+    <h2 class="sec-title rise">Agents implement. The constraints are mine.</h2>
+    <p class="sec-lede rise">
+      I build with AI coding agents — Claude Code, Antigravity and Cursor. The interesting part
+      is not that they write code; it is what has to be true around them for the output to be trustworthy.
+    </p>
+    <div class="cards rise">
+      <div class="card">
+        <h4>Every repository states its own rules</h4>
+        <p>Each one carries an <code>AGENTS.md</code> or <code>CLAUDE.md</code> setting out what to read first, what must pass before work is called done, and what must never be re-added without review. The architecture, the boundaries and the acceptance criteria are mine; the typing is delegated.</p>
+      </div>
+      <div class="card">
+        <h4>Guardrails come from incidents</h4>
+        <p>One of those files opens: <em>"most rules below exist because something went wrong once."</em> A rule forbidding a compliance threshold being moved to improve a pass rate. A provisioning script that refuses to run unfiltered, because it would invalidate every password-reset link already sent to staff. <strong>The written rule is guidance; the code guard is the backstop.</strong></p>
+      </div>
+      <div class="card">
+        <h4>Planning is version-controlled, not conversational</h4>
+        <p>Structured <code>conductor/</code> tracks hold product guidelines, tech-stack decisions, style guides and workflow per project, so intent survives between sessions and between tools. Agent skills are pinned by content hash in <code>skills-lock.json</code> — the same supply-chain discipline as a dependency lockfile.</p>
+      </div>
+      <div class="card">
+        <h4>Generated code is assumed wrong until measured</h4>
+        <p>Typecheck, unit tests, Playwright E2E and <code>cargo check</code> are gates an agent must clear before finishing, not chores run afterwards. The retracted Elo figure and the "not externally validated" perft labels on this page exist because that discipline caught them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRINCIPLES ═══════════ -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow rise">How I work</div>
+    <h2 class="sec-title rise">Four things I don't compromise on.</h2>
+    <div class="cards rise">
+      <div class="card">
+        <h4>Offline is a requirement, not a feature flag</h4>
+        <p>Every product here assumes the network will fail. Write-behind queues in IndexedDB or SQLite, explicit reconciliation on reconnect, and no silent data loss when a background sync races a user's keystrokes.</p>
+      </div>
+      <div class="card">
+        <h4>The client check is never the security boundary</h4>
+        <p>Term locks live in Firestore rules as well as in the UI. Roles resolve server-side, never from browser storage. An IPC SQL bridge allow-lists what is permitted to cross it.</p>
+      </div>
+      <div class="card">
+        <h4>Verified at real scale, not demo scale</h4>
+        <p>The scheduler's release gate is a real school export — fourteen classes, thirty-nine teachers. It is held out of version control because it holds real staff data, which means CI cannot run it, and that limitation is written down rather than glossed over.</p>
+      </div>
+      <div class="card">
+        <h4>Claims get retracted when they don't hold</h4>
+        <p>I audit my own codebases in writing — including one audit that found plain-text credential storage in a project of mine and ranked it the single most serious finding. I would rather ship a documented unknown than an attractive number.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ BACKGROUND ═══════════ -->
+<section id="background">
+  <div class="wrap">
+    <div class="eyebrow rise">Background</div>
+    <h2 class="sec-title rise">A teacher who builds, not a developer guessing at schools.</h2>
+    <p class="sec-lede rise">
+      I have taught the Cambridge Computing, Digital Literacy and Mathematics curricula since 2021, and I
+      write the software the school runs on. When I model a grading rule, a bell schedule or a numeracy
+      diagnostic, I am describing a process I have worked inside — which is why the edge cases are in the
+      spec rather than in the bug tracker.
+    </p>
+    <div class="cards rise">
+      <div class="card">
+        <h4>Computing, Digital Literacy &amp; Mathematics Teacher · EdTech Developer</h4>
+        <p><strong>St. Adelaide International Schools</strong>, Dansoman &amp; Aburi campuses, Accra — August 2021 to present.<br>
+        Deliver the full Cambridge Computing and Digital Literacy curriculum and Cambridge Mathematics, and produce the schemes of work and assessment materials for them. Founded and lead the school Coding Club. Run staff development on responsible classroom use of AI tools. Built and maintain the institutional software in daily administrative use.</p>
+      </div>
+      <div class="card">
+        <h4>BSc Telecommunication Engineering</h4>
+        <p><strong>Ghana Technology University College</strong> — degree awarded by KNUST, conferred 2018.<br>
+        Engineering Mathematics I–V, Signals and Systems, Information Theory, Digital Signal Processing, Computer Architecture, Microprocessor Systems. Principles of Computer Programming (A), Algorithms and Data Structures (B).</p>
+      </div>
+      <div class="card">
+        <h4>Database Manager</h4>
+        <p><strong>UMB Bank</strong>, Accra — 2019 to 2020.<br>
+        Administered banking database systems: schema integrity, access control and routine maintenance, and designed the backup and recovery procedures that guaranteed data continuity. Where the habit of treating data loss as unacceptable comes from.</p>
+      </div>
+      <div class="card">
+        <h4>Recognition &amp; certification</h4>
+        <p><strong>UNICEF StartUp Lab</strong> — Learning Gaps Challenge, Certificate of Participation, March 2026, for BaseCamp Diagnostics.<br>
+        Google AI Essentials (2026). Seven British Council Partner Schools Global Network certifications in classroom practice, 2022–2025.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CONTACT ═══════════ -->
+<section id="contact">
+  <div class="wrap">
+    <div class="eyebrow rise">Contact</div>
+    <h2 class="sec-title rise">Open to engineering roles and consultancy.</h2>
+    <p class="sec-lede rise">
+      Strongest where the problem is genuinely hard — constraint solving, offline synchronisation,
+      native desktop and hardware integration, search algorithms — and where correctness matters
+      more than shipping speed.
+    </p>
+
+    <div class="contact-grid rise">
+      <div>
+        <dl>
+          <div class="c-line">
+            <dt>Email</dt>
+            <dd><a href="mailto:codingwithhector@gmail.com">codingwithhector@gmail.com</a></dd>
+          </div>
+          <div class="c-line">
+            <dt>Phone</dt>
+            <dd><a href="tel:+233532947022">+233 53 294 7022</a></dd>
+          </div>
+          <div class="c-line">
+            <dt>LinkedIn</dt>
+            <dd><a href="https://linkedin.com/in/hector-aryiku-028b3b203" target="_blank" rel="noopener">hector-aryiku</a></dd>
+          </div>
+          <div class="c-line">
+            <dt>Location</dt>
+            <dd>Accra, Ghana <small>Available remote · GMT</small></dd>
+          </div>
+          <div class="c-line">
+            <dt>Live</dt>
+            <dd>
+              <a href="https://sais-portal.web.app" target="_blank" rel="noopener">sais-portal.web.app</a><br>
+              <a href="https://sais-lessons.web.app" target="_blank" rel="noopener">sais-lessons.web.app</a>
+            </dd>
+          </div>
+          <div class="c-line">
+            <dt>GitHub</dt>
+            <dd>
+              <a href="https://github.com/incredibleHeck" target="_blank" rel="noopener">github.com/incredibleHeck</a>
+              <small>Client repositories are private — see below</small>
+            </dd>
+          </div>
+          <div class="c-line">
+            <dt>Portfolio</dt>
+            <dd><a href="assets/Hector_Aryiku_Engineering_Portfolio.pdf" download>Portfolio PDF ↓</a><small>Five pages · the same work in depth</small></dd>
+          </div>
+          <div class="c-line">
+            <dt>CV</dt>
+            <dd><a href="assets/CV_Hector_Aryiku.pdf" download>Curriculum vitae ↓</a><small>Two pages · experience, education and references</small></dd>
+          </div>
+        </dl>
+        <p style="margin-top:26px; font-size:15px; color:var(--paper-3); max-width:52ch;">
+          Most systems above hold live school or customer data, so their repositories are private —
+          that is a condition of the work, not a gap in it. Two are running publicly at the addresses
+          listed. I can screen-share a walkthrough of any codebase here, talk through its architecture
+          documents, or arrange repository access under NDA.
+        </p>
+      </div>
+
+      <div>
+        <form id="contact-form" novalidate>
+          <div class="field">
+            <label for="cf-name">Your name</label>
+            <input id="cf-name" name="name" type="text" required autocomplete="name" placeholder="Who's writing">
+          </div>
+          <div class="field">
+            <label for="cf-email">Email</label>
+            <input id="cf-email" name="email" type="email" required autocomplete="email" placeholder="Where I should reply">
+          </div>
+          <div class="field">
+            <label for="cf-msg">Message</label>
+            <textarea id="cf-msg" name="message" required placeholder="What you're working on, and what you need"></textarea>
+          </div>
+          <div class="hp" aria-hidden="true">
+            <label for="cf-company">Company</label>
+            <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <button class="send" type="submit" id="cf-send">Send message</button>
+          <p class="form-note" id="cf-note">Goes straight to my inbox. I reply within a day or two.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img class="foot-logo" src="assets/logo-full-onlight.png" alt="HecTech" width="362" height="300">
+  </div>
+  <div class="wrap foot-in">
+    <div>Hector Aryiku</div>
+    <div>Accra, Ghana · <a href="mailto:codingwithhector@gmail.com">codingwithhector@gmail.com</a></div>
+    <div>Built as one static page. No framework, no tracker.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* nav hairline appears once the page has moved */
+  var nav = document.getElementById('nav');
+  function onScroll(){ nav.classList.toggle('stuck', window.scrollY > 8); }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive:true });
+
+  /* scroll reveal — no-ops cleanly when reduced motion is requested */
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rises = document.querySelectorAll('.rise');
+  if (reduce || !('IntersectionObserver' in window)) {
+    rises.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin:'0px 0px -8% 0px', threshold:.06 });
+    rises.forEach(function(el, i){
+      // stagger only the hero, so the first screen resolves as a sequence
+      if (i < 6) el.style.transitionDelay = (i * 70) + 'ms';
+      io.observe(el);
+    });
+  }
+
+  /* ── contact form ──────────────────────────────────────
+     Writes to Firestore when a config is present; otherwise
+     hands off to the mail client. Either way the visitor gets
+     a definite outcome, never a silent failure. */
+  var form = document.getElementById('contact-form');
+  var note = document.getElementById('cf-note');
+  var send = document.getElementById('cf-send');
+  var EMAIL = 'codingwithhector@gmail.com';
+
+  function say(msg, state){
+    note.textContent = msg;
+    if (state) { note.setAttribute('data-state', state); }
+    else { note.removeAttribute('data-state'); }
+  }
+
+  function mailtoFallback(name, email, message){
+    var subject = 'Portfolio enquiry from ' + name;
+    var body = message + '\n\n—\n' + name + '\n' + email;
+    window.location.href = 'mailto:' + EMAIL +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(body);
+    say('Opening your mail app. If nothing happens, write to ' + EMAIL + ' directly.', 'ok');
+  }
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+
+    var name = form.name.value.trim();
+    var email = form.email.value.trim();
+    var message = form.message.value.trim();
+
+    if (form.company.value) { return; }          // honeypot: a bot filled it
+    if (!name || !email || !message) {
+      say('Add your name, email and a message before sending.', 'err');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      say('That email address does not look right — check it and send again.', 'err');
+      return;
+    }
+
+    send.disabled = true;
+    say('Sending…');
+
+    var cfg = window.__HECTECH_FIREBASE__;
+    if (!cfg) { send.disabled = false; mailtoFallback(name, email, message); return; }
+
+    Promise.all([
+      import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js'),
+      import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js')
+    ]).then(function(mods){
+      var app = mods[0].initializeApp(cfg);
+      var fs  = mods[1];
+      return fs.addDoc(fs.collection(fs.getFirestore(app), 'contact_messages'), {
+        name: name, email: email, message: message,
+        createdAt: fs.serverTimestamp(),
+        userAgent: navigator.userAgent.slice(0, 180),
+        source: 'hectech-portfolio'
+      });
+    }).then(function(){
+      form.reset();
+      send.disabled = false;
+      say('Message sent. I reply within a day or two.', 'ok');
+    }).catch(function(){
+      send.disabled = false;
+      say('That did not send. Opening your mail app instead.', 'err');
+      mailtoFallback(name, email, message);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+# Noise only — build output and dependencies. Nothing here is sensitive;
+# this project holds no client or school data (see README).
+node_modules/
+dist/
+.firebase/
+*.log

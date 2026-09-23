@@ -1,0 +1,21 @@
+rules_version = '2';
+// Contact form only. Anyone may leave a message; nobody may read,
+// edit or delete one from the client. Read them in the Firebase console.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /contact_messages/{id} {
+      allow create: if request.resource.data.keys().hasOnly(
+                        ['name','email','message','createdAt','userAgent','source'])
+                    && request.resource.data.name    is string
+                    && request.resource.data.name.size()    > 0
+                    && request.resource.data.name.size()    < 120
+                    && request.resource.data.email   is string
+                    && request.resource.data.email.size()   < 200
+                    && request.resource.data.message is string
+                    && request.resource.data.message.size() > 0
+                    && request.resource.data.message.size() < 5000;
+      allow read, update, delete: if false;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

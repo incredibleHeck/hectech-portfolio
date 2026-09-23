@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "hectech-portfolio",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5177", "--directory", "C:\Users\me\hectech-portfolio"],
+      "port": 5177
+    }
+  ]
+}

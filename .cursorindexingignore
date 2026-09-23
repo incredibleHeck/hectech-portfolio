@@ -1,0 +1,3 @@
+# Large but occasionally useful: readable on demand, just not indexed.
+package-lock.json
+assets/*.pdf

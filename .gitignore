@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.firebase/
+*.log
+.env
+.env.local
+
+# The CV carries referees' personal phone numbers and email — third parties
+# who did not consent to being listed in a public repository. It still ships
+# from Firebase Hosting; it just does not belong in permanent git history.
+# Remove this line if you want it tracked.
+assets/CV_Hector_Aryiku.pdf

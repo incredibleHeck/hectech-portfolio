@@ -1,0 +1,49 @@
+{
+  "hosting": {
+    "site": "hectech",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      ".git/**",
+      ".claude/**",
+      "**/.*",
+      "**/node_modules/**",
+      "README.md",
+      "firestore.rules"
+    ],
+    "cleanUrls": true,
+    "headers": [
+      {
+        "source": "**/*.@(jpg|jpeg|png|webp|svg|pdf)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=604800"
+          }
+        ]
+      },
+      {
+        "source": "/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      }
+    ],
+    "redirects": [
+      {
+        "source": "/light",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/dark",
+        "destination": "/",
+        "type": 301
+      }
+    ]
+  }
+}
