@@ -1,9 +1,9 @@
-# The site itself is meant to be found. The PDFs are not — they should be
-# reached through the page, not surfaced as loose documents in search.
+# The PDFs must stay crawlable. They are served with
+# "X-Robots-Tag: noindex, noarchive", and a crawler has to be able to
+# FETCH a file to see that header. Disallowing them here would block the
+# fetch, the noindex would never be read, and a linked URL could still
+# surface in results as a bare link. Allow the crawl; the header does the work.
 User-agent: *
 Allow: /
-Disallow: /assets/*.pdf$
-Disallow: /assets/CV_Hector_Aryiku.pdf
-Disallow: /assets/Hector_Aryiku_Engineering_Portfolio.pdf
 
 Sitemap: https://hectech.web.app/sitemap.xml
