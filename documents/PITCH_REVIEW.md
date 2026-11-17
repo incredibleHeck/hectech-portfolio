@@ -184,3 +184,84 @@ are built. Keep the two words apart.
 5. **Decide the hero question** in §5 before rewriting any site copy.
 
 Items 1–3 are corrections. Item 4 is the one that changes how strong you look.
+
+---
+
+## 7. What was fixed — 2026-11-17
+
+Everything in §1–§6 above was acted on, plus what re-measuring turned up. The
+figures below were taken the same day on one rule (`documents/README.md`).
+
+### Corrected findings in this report
+
+| § | Finding | Action |
+|---|---|---|
+| 1 | Academic Compliance presented as a minor system | Rewritten from current source and promoted to **slot 01** on the site, to lead the Education Technology flagship in the portfolio PDF, and to the **first project entry** in the CV |
+| 1 | "BaseCamp is the largest codebase" | Receipt now reads **~125k · Academic Compliance · tracked source, measured 2026-11-17** |
+| 2.1 | Twelve Google-redirect links | All replaced with direct URLs in `documents/pitches.md`; every URL re-checked (13 return 200, 3 are bot-blocks that load in a browser) |
+| 2.2 | EduScheduler called a Rust engine | Now "**11,443 lines of TypeScript — not Rust**"; the rail says "27-line Rust shell"; the bare `Rust` chip is gone |
+| 2.3 | Solver description understated | **Tabu search** and the **repair phase** named on the site, in the PDF, in the CV skills line and in the competencies block |
+| 2.4 | "Recognized by the UNICEF StartUp Lab" | **Certificate of Participation**, Learning Gaps Challenge, March 2026 — everywhere |
+| 2.5 | "127+ automated test suites" | Replaced with run figures: **2,392 passing** (Academic Compliance), **140** (Doxamix), **129 counted in source** (Nexus) |
+| 2.6 | LinkedIn handle conflict | Made consistent at `hectorheckteck`; **still unverified** — LinkedIn returns 999. The GitHub profile README disagrees and needs the same fix once you confirm which loads |
+| 5 | Hero serving two incompatible audiences | Settled, with a surface-by-surface table in §0 of `documents/pitches.md`. "Vibe coding" now appears only where it is the advertised job title |
+| 5 | "founder of HecTech" | "I build as HecTech" |
+| 5 | "10 shipped" vs "10+ live" | "Ten built; seven running in a school or business; four on public URLs" |
+
+### Found while re-measuring, also fixed
+
+- **SAIS Portal is ~101k lines and was committed today** — second largest here,
+  and that was in neither document. Added to the index and its rail.
+- **Doxamix has 140 tests, not 26**, across 34 files (`npx vitest run`, green).
+- **The September audit's most serious code finding was remediated.** The Doxamix
+  orders collection no longer carries `allow create: if true`: there is schema
+  validation with `hasOnly`, bounded line items, `status` pinned to `pending`,
+  `createdAt` pinned to server time, `email_verified` on order reads, a
+  `mergeOrderItems` helper rejecting zero/negative/fractional/string quantities,
+  and an idempotency guard. The claim on the site has been rewritten **upward**
+  to four layers, and it now states that an earlier version of the page made a
+  claim the rules did not support.
+- **Nexus "key derivation" was wrong.** `derive_key` is a single
+  `SHA-256(salt ‖ passphrase)`, confirmed in a fresh clone of `nexuspearl`. The
+  site and PDF now say so plainly, and name Argon2id as the fix.
+- **Nexus delivery is now evidenced** — `docs/STATUS.md` carries a dated
+  owner confirmation (2026-09-23), cited in the rail.
+- **Report Generator is 12 spreadsheets, not 13**, and one campus, not three
+  (`dev-tools/fleet/fleet_inventory.json`).
+- **"Each repository carries an AGENTS.md"** → "the main repositories", which is
+  what is true.
+- **PostgreSQL/Prisma removed from the CV skills line** — it exists in one 2026
+  Victor backend, and listing it beside Firebase implied equal depth.
+- **The documented PDF build command was broken.** Given a bare filename, Chrome
+  treats it as a hostname, fails to resolve it and exits without writing — so a
+  "successful" build silently kept the old PDF. Fixed in `documents/README.md`
+  with absolute paths, a `file:///` URL and a page-count check afterwards.
+
+### The one instruction I did not follow
+
+**The 14 classes / 39 teachers figure.** You asked for it on the website. The
+source does not support it and I think using it would cost you:
+
+- `scripts/diagnostics/fixtures/local/sais-2026-27.json` is **named "SAIS
+  Dansoman 2026/27"** and holds **20 classes, 63 teachers**, 20 subjects, 24
+  rooms and 4 divisions. The 615-period run documented in `CHANGELOG.md` v1.0.0
+  and `docs/delivery-readiness.md:44-58` is that fixture.
+- The 14-class fixture is `dansoman.json`, which holds **55 teachers, not 39**,
+  and **zero divisions** — and `delivery-readiness.md:141` records it as the
+  *wrong* fixture for exactly that reason, since the delivery school runs four.
+- So "14 classes and 39 teachers" matches no run in the repository, and the
+  smaller fixture is the one the docs call unrepresentative.
+
+The site keeps **20 classes · 63 teachers · 615 periods**, cited to the changelog
+and the readiness doc. If you did perform a separate 39-teacher run, write a
+dated line into `docs/delivery-readiness.md` saying so and I will cite that
+instead — the figure needs a file behind it, same as every other number here.
+
+### Still open, and yours to decide
+
+1. **Confirm the LinkedIn URL**, then fix the GitHub profile README to match.
+2. **The services section** (`documents/pitches.md` §1.3) is written but not
+   built on the site. It is the one piece of copy that turns a reader into a
+   client rather than an employer.
+3. **Victor's repository goes public in January 2027.** It is the only project
+   with no customer data in it, and the only one a stranger can read.

@@ -1,5 +1,9 @@
-# Noise only — build output and dependencies. Nothing here is sensitive;
-# this project holds no client or school data (see README).
+# Privacy — third-party personal data. Referees' names, emails and phone
+# numbers. Gitignored for the same reason; keep out of every AI index too.
+*with-references*
+documents/*.local.html
+
+# Noise only — build output and dependencies. Nothing bad happens if these leak.
 node_modules/
 dist/
 .firebase/

@@ -12,16 +12,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 src = io.open(os.path.join(HERE, "cv.html"), encoding="utf-8").read()
 
-# ── 1. public referee block (this goes to an employer, not the open web) ──
-PRIVATE = '''  <div class="two">
-    <div class="note"><b>Dr. Ruhiya Abubakar</b> — Dean, Faculty of Engineering, Ghana Communication Technology University · rabubakar@gctu.edu.gh · +233 20 832 4097 <i>(academic referee)</i></div>
-    <div class="note"><b>Mrs. Theodora Hammond</b> — Administrator, St. Adelaide International Schools · +233 24 482 6879 <i>(current employer)</i></div>
-  </div>
-'''
-PUBLIC = '''  <div class="note"><b>References available on request</b> — an academic referee (Dean, Faculty of Engineering, Ghana Communication Technology University) and my current employer at St. Adelaide International Schools.</div>
-'''
-assert PRIVATE in src
-src = src.replace(PRIVATE, PUBLIC, 1)
+# ── 1. referees: cv.html is already the public version ("available on request").
+#    The referees' details live only in the gitignored referees.local.html.
+assert "References available on request" in src, "cv.html should be the public CV"
 
 # ── 2. profile aimed at the JD's actual duties ────────────────────────────
 old_profile = re.search(r'<p class="profile">(.*?)</p>', src, re.S).group(0)
@@ -31,10 +24,10 @@ new_profile = '''<p class="profile">
     I teach the Cambridge Computing, Digital Literacy and Mathematics curricula at St. Adelaide
     International Schools and build the software that school runs on: a report-card and grading portal, a
     timetable generator, and a lesson-plan compliance system, all live and in daily administrative use.
-    My working stack is <b>TypeScript, JavaScript, Python, React and Next.js over PostgreSQL and Firebase</b>,
+    My working stack is <b>TypeScript, JavaScript, Python, React and Next.js, with Firebase and PostgreSQL</b>,
     with Vitest and Playwright for automated testing and GitHub Actions for CI. I also work lower down the
-    stack in Rust and C++ — a constraint solver and a game engine with a neural evaluation — which is where
-    the habits behind the rest of this come from.
+    stack — a constraint-solving timetable generator, and a game engine in Rust with a neural evaluation —
+    which is where the habits behind the rest of this come from.
   </p>'''
 src = src.replace(old_profile, new_profile, 1)
 
@@ -42,9 +35,9 @@ src = src.replace(old_profile, new_profile, 1)
 skills_block = re.search(r'(<div class="skill">.*?</div>)\s*(?=<div class="sec">)', src, re.S).group(1)
 start = src.index('<div class="skill">')
 end = src.index('<div class="sec">', start)
-new_skills = '''<div class="skill"><b>Languages:</b> TypeScript, JavaScript (ES6+ and vanilla), Python, SQL, Rust, C++</div>
+new_skills = '''<div class="skill"><b>Languages:</b> TypeScript, JavaScript (ES6+ and vanilla), Python, SQL, Rust</div>
   <div class="skill"><b>Frontend:</b> React 18/19, <b>Next.js</b>, Vite, Tailwind CSS, HTML5/CSS3, Progressive Web Apps, Three.js</div>
-  <div class="skill"><b>Backend &amp; data:</b> Node.js, <b>PostgreSQL</b> (Prisma, Supabase), SQLite, Firebase (Firestore, Auth, Cloud Functions), REST APIs</div>
+  <div class="skill"><b>Backend &amp; data:</b> Node.js, <b>PostgreSQL</b> (Prisma), SQLite, Firebase (Firestore, Auth, Cloud Functions), REST APIs</div>
   <div class="skill"><b>Testing &amp; QA:</b> <b>Vitest</b> (Jest-compatible API), <b>Playwright</b> end-to-end, React Testing Library, test-case authoring, code review</div>
   <div class="skill"><b>Engineering practice:</b> Git/GitHub, <b>GitHub Actions CI/CD</b>, Docker Compose, Linux shell, SOLID principles, secure coding, applied cryptography (Ed25519, AES-256-GCM), technical documentation and user manuals</div>
   <div class="skill"><b>Architecture:</b> Offline-first design, role-based access control and server-side authorisation rules, transactional integrity under concurrency, constraint satisfaction (MRV, backtracking)</div>

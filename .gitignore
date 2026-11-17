@@ -10,8 +10,18 @@ dist/
 # from Firebase Hosting; it just does not belong in permanent git history.
 # Remove this line if you want it tracked.
 assets/CV_Hector_Aryiku.pdf
-CV_Hector_Aryiku_with-references.*
+*with-references*
 
 # Rendered output — rebuild with documents/build_cv.py
 documents/*.pdf
 documents/*.docx
+
+# Audit report — describes open security gaps in client systems. Keep local.
+documents/AUDIT_FINDINGS.md
+
+# Referees' contact details — read only by the private CV build. Never commit.
+documents/*.local.html
+
+# Application pitches and cover-letter templates. This repository is public, and
+# an employer reading the template they are about to be sent is not the plan.
+documents/pitches.md

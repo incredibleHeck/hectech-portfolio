@@ -12,22 +12,28 @@ import io, os, re, html, subprocess, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 
-PRIVATE_BLOCK = '''  <div class="two">
-    <div class="note"><b>Dr. Ruhiya Abubakar</b> — Dean, Faculty of Engineering, Ghana Communication Technology University · rabubakar@gctu.edu.gh · +233 20 832 4097 <i>(academic referee)</i></div>
-    <div class="note"><b>Mrs. Theodora Hammond</b> — Administrator, St. Adelaide International Schools · +233 24 482 6879 <i>(current employer)</i></div>
-  </div>
-'''
+# cv.html is the PUBLIC CV: it says references are available on request and
+# carries no third-party contact details, so it is safe in a public repository.
+# The referees' details live only in referees.local.html, which is gitignored;
+# the full variant is built only when that file is present on this machine.
+# Which CV to build: `python build_cv.py` builds cv.html (the engineering CV the
+# website serves); `python build_cv.py cv_teaching.html` builds the teaching CV.
+SOURCES = {"cv.html": "CV_Hector_Aryiku", "cv_teaching.html": "CV_Hector_Aryiku_Teaching"}
+SRC = sys.argv[1] if len(sys.argv) > 1 else "cv.html"
+assert SRC in SOURCES, f"unknown CV source {SRC!r}; expected one of {sorted(SOURCES)}"
+BASE = SOURCES[SRC]
+src = io.open(os.path.join(HERE, SRC), encoding="utf-8").read()
+REF_BLOCK = re.compile(r"<!-- REFERENCES -->.*?<!-- /REFERENCES -->", re.S)
+assert REF_BLOCK.search(src), f"REFERENCES markers not found in {SRC}"
 
-PUBLIC_BLOCK = '''  <div class="note"><b>References available on request</b> — an academic referee (Dean, Faculty of Engineering, Ghana Communication Technology University) and my current employer at St. Adelaide International Schools. Contact details supplied directly to a prospective employer.</div>
-'''
+REFEREES = os.path.join(HERE, "referees.local.html")
+private = io.open(REFEREES, encoding="utf-8").read() if os.path.exists(REFEREES) else None
 
-src = io.open(os.path.join(HERE, "cv.html"), encoding="utf-8").read()
-assert PRIVATE_BLOCK in src, "referee block not found — did cv.html change?"
-
-variants = {
-    "CV_Hector_Aryiku":                 src.replace(PRIVATE_BLOCK, PUBLIC_BLOCK),
-    "CV_Hector_Aryiku_with-references": src,
-}
+variants = {BASE: src}
+if private:
+    variants[BASE + "_with-references"] = REF_BLOCK.sub(lambda _m: private, src, count=1)
+else:
+    print("referees.local.html not found - building the public CV only")
 
 # ── render each to PDF ────────────────────────────────────────────────
 for name, content in variants.items():
@@ -97,7 +103,7 @@ def build_docx(content, out_path):
         s.top_margin = s.bottom_margin = Inches(0.5)
         s.left_margin = s.right_margin = Inches(0.62)
     st = doc.styles["Normal"]
-    st.font.name = "Calibri"; st.font.size = Pt(9.8); st.font.color.rgb = INK2
+    st.font.name = "Calibri"; st.font.size = Pt(11); st.font.color.rgb = INK2
     st.paragraph_format.space_after = Pt(0); st.paragraph_format.space_before = Pt(0)
     st.paragraph_format.line_spacing = 1.08
 
@@ -109,7 +115,7 @@ def build_docx(content, out_path):
         if hang:   p.paragraph_format.first_line_indent = Inches(-hang)
         return p
 
-    def emit(p, text, size=9.8, bold=False, italic=False, color=INK2, caps=False, spacing=None):
+    def emit(p, text, size=11, bold=False, italic=False, color=INK2, caps=False, spacing=None):
         r = p.add_run(text); r.font.size = Pt(size); r.bold = bold; r.italic = italic
         r.font.color.rgb = color; r.font.name = "Calibri"
         if caps: r.font.all_caps = True
@@ -128,36 +134,36 @@ def build_docx(content, out_path):
     for m in re.finditer(PATTERN, body, flags=re.S):
         g = m.groups()
         if g[0] is not None:
-            p = para(after=1); emit(p, flat(g[0]), size=19, bold=True, color=INK, spacing=0.5)
+            p = para(after=1); emit(p, flat(g[0]), size=20, bold=True, color=INK, spacing=0.5)
         elif g[1] is not None:
             p = para(after=4); emit(p, flat(g[1]), size=10, bold=True, color=GOLD)
         elif g[2] is not None:
             txt = re.sub(r"</div>\s*<div>", " | ", g[2])
             txt = re.sub(r"<br\s*/?>", " | ", txt)
-            p = para(after=0); emit(p, flat(txt).replace("in/ ", "in/"), size=9.4)
+            p = para(after=0); emit(p, flat(txt), size=9.5)
         elif g[3] is not None:
             p = para(before=0 if first else 9, after=3.5)
-            emit(p, flat(g[3]), size=9.2, bold=True, color=GOLD, caps=True, spacing=1.2)
+            emit(p, flat(g[3]), size=9.5, bold=True, color=GOLD, caps=True, spacing=1.2)
             rule(p); first = False
         elif g[4] is not None:
             p = para(after=0)
-            for t, b in runs(g[4]): emit(p, t, size=9.7, bold=b, color=INK if b else INK2)
+            for t, b in runs(g[4]): emit(p, t, size=11, bold=b, color=INK if b else INK2)
         elif g[5] is not None:
             p = para(after=1.8)
-            for t, b in runs(g[5]): emit(p, t, size=9.7, bold=b, color=INK if b else INK2)
+            for t, b in runs(g[5]): emit(p, t, size=11, bold=b, color=INK if b else INK2)
         elif g[6] is not None:
-            p = para(before=6, after=0); emit(p, flat(g[6]), size=10.4, bold=True, color=INK)
-            if g[7]: emit(p, "   " + flat(g[7]), size=9.3, color=GREY)
+            p = para(before=6, after=0); emit(p, flat(g[6]), size=12, bold=True, color=INK)
+            if g[7]: emit(p, "   " + flat(g[7]), size=9, color=GREY)
         elif g[8] is not None:
             p = para(after=2.4)
-            for t, b in runs(g[8]): emit(p, t, size=9.3, italic=not b, bold=b, color=GOLD if b else GREY)
+            for t, b in runs(g[8]): emit(p, t, size=10, italic=not b, bold=b, color=GOLD if b else GREY)
         elif g[9] is not None:
             p = para(indent=0.17, hang=0.17, after=1.8)
-            emit(p, "\u25aa  ", size=8.6, color=GOLD)
-            for t, b in runs(g[9]): emit(p, t, size=9.6, bold=b, color=INK if b else INK2)
+            emit(p, "\u25aa  ", size=9, color=GOLD)
+            for t, b in runs(g[9]): emit(p, t, size=11, bold=b, color=INK if b else INK2)
         elif g[10] is not None:
             p = para(before=2, after=1.8)
-            for t, b in runs(g[10]): emit(p, t, size=9.5, bold=b, color=INK if b else INK2)
+            for t, b in runs(g[10]): emit(p, t, size=10.5, bold=b, color=INK if b else INK2)
 
     doc.save(out_path)
 
@@ -167,7 +173,14 @@ for name, content in variants.items():
     os.remove(os.path.join(HERE, f"_{name}.html"))
 
 # ── verify the split actually held ────────────────────────────────────
-LEAKS = ("rabubakar@gctu", "+233 20 832 4097", "+233 24 482 6879", "Abubakar", "Hammond")
+# The strings to look for come from the private file itself — names, emails
+# and phone numbers — so nothing personal has to be written into this script.
+if private:
+    LEAKS = set(re.findall(r"<b>(.*?)</b>", private))
+    LEAKS |= set(re.findall(r"[\w.+-]+@[\w-]+\.[\w.]+", private))
+    LEAKS |= set(re.findall(r"\+\d[\d ]{7,}\d", private))
+else:
+    LEAKS = set()
 print(f"{'file':<42} {'pages':>5}   referee-detail hits")
 for name in variants:
     pdf = open(os.path.join(HERE, name + ".pdf"), "rb").read()
@@ -176,3 +189,13 @@ for name in variants:
     text = "\n".join(p.text for p in doc.paragraphs)
     hits = sum(text.count(x) for x in LEAKS)
     print(f"{name + '.pdf/.docx':<42} {pages:>5}   {hits}")
+    if name == BASE:
+        assert hits == 0, "the public CV contains referee details"
+
+# The website serves assets/CV_Hector_Aryiku.pdf. Copy the public build there so
+# a rebuilt CV can't be left behind when the site is deployed.
+if SRC == "cv.html":
+    import shutil
+    shutil.copyfile(os.path.join(HERE, "CV_Hector_Aryiku.pdf"),
+                    os.path.join(HERE, "..", "assets", "CV_Hector_Aryiku.pdf"))
+    print("copied the public CV to assets/ - deploy to publish it")

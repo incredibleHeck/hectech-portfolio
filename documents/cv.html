@@ -8,7 +8,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,300..700&display=swap" rel="stylesheet">
 <style>
   *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
-  @page{ size:A4 portrait; margin:15mm 14mm 13mm; }
+  /* Page numbers come from the print engine, so they are right however long
+     the content runs. Hand-placed footers drifted onto the wrong page. */
+  @page{
+    size:A4 portrait; margin:11mm 13mm 12mm;
+    @bottom-left{ content:"Hector Nii Armaakwei Aryiku — Curriculum Vitae";
+                  font:8pt 'IBM Plex Mono', Consolas, monospace; color:#7A7165; }
+    @bottom-right{ content:"Page " counter(page) " of " counter(pages);
+                   font:8pt 'IBM Plex Mono', Consolas, monospace; color:#7A7165; }
+  }
   :root{
     --ink:#1A1714; --ink-2:#3D372F; --ink-3:#635B50; --ink-4:#7A7165;
     --rule:#DED8CB; --rule-soft:#EAE5DB; --wash:#F8F5EF;
@@ -18,18 +26,23 @@
     --mono:'IBM Plex Mono',Consolas,monospace;
   }
   body{ font-family:var(--serif); color:var(--ink-2); background:#E7E2D8;
-        font-size:12.54px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+        font-size:11pt; line-height:1.45; -webkit-font-smoothing:antialiased; }
   .page{ background:#FDFCFA; }
   @media screen{ .page{ max-width:210mm; margin:20px auto; padding:16mm 14mm;
                         box-shadow:0 5px 24px rgba(26,23,20,.10); } }
   @media print{
     html,body{ background:#fff; }
     .page{ margin:0; padding:0; box-shadow:none; max-width:none; }
-    .e{ page-break-inside:avoid; }
-    h1,h2,h3{ page-break-after:avoid; }
     .no-print{ display:none!important; }
-    .foot{ display:none; }
   }
+  /* A project may continue across a page break, but a bullet never splits and a
+     title never sits alone at the foot of a page. */
+  li, .skill, .note, .e-h, .e-m{ break-inside:avoid; }
+  /* The last page carries Education and References together. Without this the
+     References block orphans onto a page of its own. Re-check after any edit
+     that changes the length of Professional Experience. */
+  .sec.last-page{ break-before:page; }
+  .sec, .e-h, .e-m{ break-after:avoid; }
   .no-print{ position:fixed; top:14px; right:14px; z-index:9; display:flex; gap:9px; align-items:center;
              background:rgba(26,23,20,.92); padding:7px 8px 7px 15px; border-radius:99px; }
   .no-print span{ color:#C9C0B0; font-size:12.55px; }
@@ -37,74 +50,68 @@
                     padding:6px 14px; border-radius:99px; font:500 11px var(--mono); }
 
   /* header */
-  .hdr{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
-        border-bottom:2.5px solid var(--ink); padding-bottom:12px; }
+  .hdr{ border-bottom:2.5px solid var(--ink); padding-bottom:10px; }
   .hdr-l{ display:flex; align-items:center; gap:10px; }
-  .hdr img{ height:56px; width:auto; }
+  .hdr img{ height:50px; width:auto; }
   h1{ font-family:var(--disp); font-variation-settings:'wdth' 100;
-      font-size:22.41px; font-weight:800; letter-spacing:-.028em; color:var(--ink); line-height:1; }
-  .role{ font-family:var(--mono); font-size:10.85px; letter-spacing:.09em; text-transform:uppercase;
+      font-size:20pt; font-weight:800; letter-spacing:-.028em; color:var(--ink); line-height:1; }
+  .role{ font-family:var(--mono); font-size:9pt; letter-spacing:.04em; text-transform:uppercase;
          color:var(--gold); margin-top:4px; }
-  .meta{ text-align:right; font-family:var(--mono); font-size:10.71px; color:var(--ink-3); line-height:1.66; }
+  .role .sep{ display:none; } .role .r2{ display:block; margin-top:1px; }
+  .meta{ font-family:var(--mono); font-size:9pt; color:var(--ink-3); line-height:1.6; margin-top:9px; }
   .meta a{ color:var(--ink); text-decoration:none; }
   .meta .d{ color:var(--ink-4); }
+  .nw{ white-space:nowrap; }
 
   /* section */
-  .sec{ display:flex; align-items:baseline; gap:10px; margin:18px 0 9px; }
-  .sec h2{ font-family:var(--mono); font-size:10.85px; font-weight:500; letter-spacing:.16em;
+  .sec{ display:flex; align-items:baseline; gap:10px; margin:13px 0 7px; }
+  .sec h2{ font-family:var(--mono); font-size:9.5pt; font-weight:500; letter-spacing:.16em;
            text-transform:uppercase; color:var(--gold); white-space:nowrap; }
   .sec .ln{ flex:1; height:1px; background:var(--gold); opacity:.42; }
 
-  p.profile{ font-size:12.41px; line-height:1.5; color:var(--ink-2); }
+  p.profile{ font-size:11pt; line-height:1.4; color:var(--ink-2); }
   p.profile b{ color:var(--ink); font-weight:600; }
 
   /* skills */
-  .skill{ margin-bottom:5px; font-size:12.15px; line-height:1.45; }
+  .skill{ margin-bottom:2px; font-size:11pt; line-height:1.38; }
   .skill b{ color:var(--ink); font-weight:600; }
 
   /* entries */
-  .e{ margin-bottom:12px; }
+  .e{ margin-bottom:8px; }
   .e-h{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
   .e-h h3{ font-family:var(--disp); font-variation-settings:'wdth' 92;
-           font-size:13.59px; font-weight:700; color:var(--ink); letter-spacing:-.012em; }
-  .e-h .when{ font-family:var(--mono); font-size:10.45px; color:var(--ink-4); white-space:nowrap; }
-  .e-m{ margin:2px 0 6px; font-size:11.36px; font-style:italic; color:var(--ink-3); }
+           font-size:12pt; font-weight:700; color:var(--ink); letter-spacing:-.012em; }
+  .e-h .when{ font-family:var(--mono); font-size:9pt; color:var(--ink-4); white-space:nowrap; }
+  .e-m{ margin:1px 0 3px; font-size:10pt; font-style:italic; color:var(--ink-3); }
   .e-m b{ font-style:normal; font-weight:600; color:var(--gold); }
   ul{ list-style:none; }
-  li{ position:relative; padding-left:12px; font-size:12.02px; line-height:1.6;
-      color:var(--ink-2); margin-bottom:4px; }
-  li::before{ content:""; position:absolute; left:0; top:7px; width:3.4px; height:3.4px;
+  li{ position:relative; padding-left:13px; font-size:11pt; line-height:1.38;
+      color:var(--ink-2); margin-bottom:2px; }
+  li::before{ content:""; position:absolute; left:0; top:0.62em; width:4px; height:4px;
               border-radius:50%; background:var(--gold); }
   li b{ color:var(--ink); font-weight:600; }
   li code{ font-family:var(--mono); font-size:.88em; color:var(--gold); }
 
   .two{ display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; }
-  .note{ font-size:11.76px; color:var(--ink-3); line-height:1.45; }
+  .note{ font-size:10.5pt; color:var(--ink-3); line-height:1.42; }
   .note b{ color:var(--ink); font-weight:600; }
-
-  .foot{ margin-top:auto; padding-top:6px; border-top:1px solid var(--rule);
-         display:flex; justify-content:space-between;
-         font-family:var(--mono); font-size:9.54px; color:var(--ink-4); }
 </style>
 </head>
 <body>
 <div class="no-print"><span>Curriculum Vitae</span><button onclick="window.print()">Save as PDF</button></div>
 
-<!-- ════════ PAGE 1 ════════ -->
 <div class="page">
   <header class="hdr">
     <div class="hdr-l">
       <img src="logo.png" alt="">
       <div>
         <h1>HECTOR NII ARMAAKWEI ARYIKU</h1>
-        <div class="role">Systems &amp; Full-Stack Product Engineer · Cambridge Computing &amp; Mathematics Educator</div>
+        <div class="role">Systems &amp; Full-Stack Product Engineer <span class="sep">·</span> <span class="r2">Cambridge Computing &amp; Mathematics Educator</span></div>
       </div>
     </div>
     <div class="meta">
-      <div>Accra, Ghana <span class="d">·</span> +233 53 294 7022</div>
-      <div><a href="mailto:codingwithhector@gmail.com">codingwithhector@gmail.com</a></div>
-      <div><a href="https://hectech.web.app">hectech.web.app</a></div>
-      <div><span class="d">in/</span><a href="https://linkedin.com/in/hector-aryiku-028b3b203">hector-aryiku</a> <span class="d">·</span> <a href="https://github.com/incredibleHeck">github.com/incredibleHeck</a></div>
+      <div><span class="nw">Accra, Ghana · remote, GMT</span> <span class="d">·</span> <span class="nw">+233 53 294 7022</span> <span class="d">·</span> <a class="nw" href="mailto:codingwithhector@gmail.com">codingwithhector@gmail.com</a> <span class="d">·</span> <a class="nw" href="https://hectech.web.app">hectech.web.app</a></div>
+      <div><a class="nw" href="https://github.com/incredibleHeck">github.com/incredibleHeck</a> <span class="d">·</span> <a class="nw" href="https://linkedin.com/in/hectorheckteck">linkedin.com/in/hectorheckteck</a></div>
     </div>
   </header>
 
@@ -113,37 +120,50 @@
     Telecommunication Engineering graduate and self-directed software engineer. I teach the Cambridge Computing,
     Digital Literacy and Mathematics curricula and <b>build the production software the school runs on</b> —
     timetabling, grading, diagnostics and reporting — so I specify these systems as someone who works inside the
-    processes they model. My work spans offline-first web and desktop products (React, TypeScript, Firebase,
-    Tauri) and systems engineering in Rust: a constraint solver, a native point-of-sale application driving
-    thermal hardware directly, and a 10×10 draughts engine with NNUE evaluation compiled to WebAssembly.
+    processes they model. My work spans offline-first web and desktop products (React, Next.js, TypeScript, Firebase,
+    Tauri) and the systems work underneath: a ~125,000-line Next.js compliance platform that audits a school's
+    lesson plans and lesson videos, a constraint solver running in a Web Worker, a point-of-sale application
+    whose Rust core drives thermal hardware directly, and a 10×10 draughts engine in Rust with NNUE evaluation
+    compiled to WebAssembly. <b>Open to remote engineering roles and consultancy.</b>
   </p>
 
   <div class="sec"><h2>Technical Skills</h2><div class="ln"></div></div>
-  <div class="skill"><b>Languages:</b> TypeScript, JavaScript (ES6+), Rust, Python, C++, SQL, Google Apps Script</div>
+  <div class="skill"><b>Languages:</b> TypeScript, JavaScript (ES6+), Rust, Python, SQL, Google Apps Script</div>
   <div class="skill"><b>Frontend &amp; desktop:</b> React 18/19, Next.js, Vite, Tailwind CSS, Tauri v2 (desktop and Android), WebAssembly, Web Workers, Three.js, Progressive Web Apps</div>
-  <div class="skill"><b>Backend &amp; cloud:</b> Node.js, Firebase (Firestore, Auth, Cloud Functions, Hosting), Supabase, PostgreSQL, SQLite (rusqlite, WAL), REST APIs</div>
-  <div class="skill"><b>AI &amp; machine learning:</b> Google Gemini multimodal pipelines, LLM API integration, prompt engineering, PyTorch (NNUE training, int16 quantisation-aware export)</div>
-  <div class="skill"><b>Algorithms:</b> Constraint satisfaction (minimum-remaining-values ordering, backtracking), alpha-beta search with principal variation search, Zobrist transposition tables, bitboards, retrograde endgame analysis</div>
-  <div class="skill"><b>Practice:</b> Git/GitHub, Vitest, Playwright, GitHub Actions CI, applied cryptography (Ed25519, AES-256-GCM), security rules and RBAC, technical documentation</div>
+  <div class="skill"><b>Backend &amp; data:</b> Firebase (Firestore, Auth, Cloud Functions, Hosting, security rules), Node.js and Express, SQLite (rusqlite, WAL), IndexedDB, REST and webhook APIs</div>
+  <div class="skill"><b>AI &amp; machine learning:</b> Google Gemini multimodal pipelines, LLM API integration, prompt evaluation, PyTorch (NNUE training, int16 quantisation-aware export)</div>
+  <div class="skill"><b>Algorithms:</b> Constraint satisfaction (minimum-remaining-values ordering, backtracking, tabu search, repair heuristics), alpha-beta search with principal variation search, Zobrist transposition tables, bitboards, retrograde endgame analysis</div>
+  <div class="skill"><b>Practice:</b> Git/GitHub, Vitest, Jest, Playwright, GitHub Actions CI, applied cryptography (Ed25519, AES-256-GCM), role-based access control, technical documentation</div>
 
   <div class="sec"><h2>Selected Engineering Projects</h2><div class="ln"></div></div>
 
   <div class="e">
-    <div class="e-h"><h3>EduScheduler Pro — Constraint-Solving Timetable Suite</h3><span class="when">v1.0.0 · delivered</span></div>
-    <div class="e-m">Tauri v2 (Rust), React 18, TypeScript, Web Workers, Ed25519</div>
+    <div class="e-h"><h3>Academic Compliance — AI Lesson-Plan &amp; Lesson-Video Auditing</h3><span class="when">~125,000 lines</span></div>
+    <div class="e-m">Next.js 16, React 19, TypeScript, Firebase, Gemini 3.8 Flash, Inngest, WhatsApp Cloud API · 2,392 tests across 194 Jest suites · sais-lessons.web.app</div>
     <ul>
-      <li>Modelled academic timetabling as a constraint satisfaction problem over teachers, rooms, class groups and curriculum splits, implementing a hybrid solver with <b>dynamic minimum-remaining-values ordering and backtracking</b>.</li>
-      <li>Placed a real school timetable of <b>20 classes, 63 teachers and 615 curriculum periods per week in under three minutes</b>, with no unplaced lessons, no curriculum gaps and no hard conflicts — replacing a manual process that had taken the school multiple weeks.</li>
-      <li>Rebuilt clash detection to compare <b>real clock times rather than period indices</b>, so schools running staggered bell schedules across divisions are validated correctly.</li>
-      <li>Implemented offline licence activation with Ed25519-signed keys verified against an embedded public key — no account, no server call — alongside automatic restore points with undo/redo.</li>
+      <li>Built and operate the largest of these systems: lesson plans submitted as PDF or Word are audited against <b>Cambridge lesson-planning standards across ten subject departments</b>, banded on a three-tier gate and routed to the responsible head of department. Cited syllabus codes are checked against the class stage, and an out-of-stage citation caps the score.</li>
+      <li>Enforced access control in <b>four independent layers</b> across 437 lines of rules: Firestore rules, Storage rules, a Next.js edge proxy that redirects before a page renders, and permission checks inside the server actions. No layer trusts a client-side role check.</li>
+      <li>Shipped a separate pupil portal on its own hosting target and rules, with a content-security policy forbidding framing, form submission and plugins, and <code>noindex</code> headers.</li>
+      <li>Extended it into a <b>lesson-video pipeline</b>: Gemini writes and ranks YouTube searches per lesson and reviews candidate video content by streaming the file to the model. <b>Fourteen Inngest step functions</b> carry audits, video review, retention sweeps, scheduled notifications and a sweeper for audits that never completed.</li>
     </ul>
   </div>
 
   <div class="e">
-    <div class="e-h"><h3>BaseCamp Diagnostics — Offline-First Learning Analytics</h3><span class="when">~95,000 lines</span></div>
+    <div class="e-h"><h3>EduScheduler Pro — Constraint-Solving Timetable Suite</h3><span class="when">v1.0.0 · delivered</span></div>
+    <div class="e-m">Tauri v2, React 18, TypeScript, Web Workers, Ed25519 · one-time purchase, fully offline</div>
+    <ul>
+      <li>Modelled academic timetabling as a constraint satisfaction problem over teachers, rooms, class groups and curriculum splits, implementing a hybrid solver — <b>dynamic minimum-remaining-values ordering with backtracking, tabu search to escape local optima, and a repair phase bounded by a time budget</b> — as 11,443 lines of TypeScript in a Web Worker.</li>
+      <li>Placed a real school timetable of <b>20 classes, 63 teachers and 615 curriculum periods per week in under three minutes</b>, with no unplaced lessons, no curriculum gaps and no hard conflicts — replacing a manual process that had taken the school multiple weeks.</li>
+      <li>Rebuilt clash detection to compare <b>real clock times rather than period indices</b>, so schools running staggered bell schedules across divisions validate correctly.</li>
+      <li>Implemented offline licence activation with Ed25519-signed keys verified against an embedded public key, with no account and no server call, alongside automatic restore points with undo/redo.</li>
+    </ul>
+  </div>
+
+  <div class="e">
+    <div class="e-h"><h3>BaseCamp Diagnostics — Offline-First Learning Analytics</h3><span class="when">~76,000 lines</span></div>
     <div class="e-m">React 19, TypeScript, Firebase, Google Gemini · basecamp-pilot.web.app · <b>UNICEF StartUp Lab, Learning Gaps Challenge 2026</b></div>
     <ul>
-      <li>Architected a multi-campus diagnostic platform that identifies the <b>specific misconception</b> behind a learner error, using Gemini multimodal analysis over photographed worksheets and recorded teacher observations to produce a lesson plan and parent summary.</li>
+      <li>Architected a multi-campus diagnostic platform identifying the <b>specific misconception</b> behind a learner error, using Gemini multimodal analysis over photographed worksheets and recorded teacher observations to produce a lesson plan and parent summary.</li>
       <li>Built offline as the default path rather than a fallback: IndexedDB write-behind queues with dedicated sync managers reconcile on reconnect, so a connection dropping mid-upload loses nothing.</li>
       <li>Implemented six-role access control scoped by organisation and branch, with campus-level gap analysis for network leadership and automated SEN screening alerts routed to the responsible coordinator.</li>
     </ul>
@@ -155,49 +175,34 @@
     <ul>
       <li>Rebuilt the grading grid around <b>O(1) hash-map lookups</b> with per-cell memoisation and focus tracking, removing both re-render latency and the data loss that occurred when a background sync raced a teacher typing.</li>
       <li>Enforced authorisation <b>server-side</b>: term locks in Firestore security rules as well as the interface, and roles resolved from a server-side whitelist rather than from browser storage.</li>
+      <li>Delivers report cards to parents over the WhatsApp Cloud API, recording delivery from webhook receipts rather than trusting the send response.</li>
     </ul>
   </div>
 
   <div class="e">
-    <div class="e-h"><h3>Nexus Inventory — Native POS &amp; Hardware Integration</h3><span class="when">127 tests</span></div>
-    <div class="e-m">Rust, Tauri v2, React 19, rusqlite, nusb · built to order for a Ghanaian retail client</div>
+    <div class="e-h"><h3>Nexus Inventory — Native POS &amp; Hardware Integration</h3><span class="when">129 tests</span></div>
+    <div class="e-m">Tauri v2 with a Rust core, React 19, rusqlite, nusb · built to order, in use at a Ghanaian retail client</div>
     <ul>
       <li>Drove thermal receipt printers directly from Rust with no vendor driver — <b>ESC/POS over raw TCP and over USB bulk transfer</b> — including device enumeration and endpoint discovery.</li>
-      <li>Built a native IPC data layer over SQLite in WAL mode through seven versioned, transactional schema migrations, with an <b>allow-listed SQL bridge</b> that refuses unsafe statements at the boundary.</li>
+      <li>Built a local SQLite data layer in WAL mode through seven versioned, transactional schema migrations, with <b>every query from the interface checked at the IPC boundary</b> before it reaches the database.</li>
     </ul>
   </div>
-
-  <footer class="foot"><div>Hector Nii Armaakwei Aryiku — Curriculum Vitae</div><div>hectech.web.app</div><div>Page 1 of 2</div></footer>
-</div>
-
-<!-- ════════ PAGE 2 ════════ -->
-<div class="page">
-  <div class="sec" style="margin-top:0"><h2>Selected Engineering Projects (continued)</h2><div class="ln"></div></div>
 
   <div class="e">
     <div class="e-h"><h3>Victor — Ghanaian Damii Draughts Engine</h3><span class="when">release Jan 2027</span></div>
-    <div class="e-m">Rust (native and WebAssembly), PyTorch · ~30,000 lines</div>
+    <div class="e-m">Rust (native and WebAssembly), PyTorch · ~29,000 lines</div>
     <ul>
-      <li>Wrote a complete 10×10 engine for a variant with <b>no existing implementation</b>: bitboard move generation, alpha-beta search with principal variation search, Zobrist transposition tables and quiescence search, with each of the seven variant rules pinned by a named test.</li>
-      <li>Trained an <b>NNUE evaluation</b> end to end in PyTorch over self-play data, using per-game dataset splitting to prevent leakage between near-duplicate positions, with int16 quantisation-aware export and versioned weight files.</li>
-      <li><b>Retracted a previously published Elo figure</b> in the repository after finding the benchmark had been comparing the hand-crafted evaluator against itself, and made the faulty fallback path unreachable.</li>
-    </ul>
-  </div>
-
-  <div class="e">
-    <div class="e-h"><h3>Doxamix Foods — Full-Stack E-Commerce Platform</h3><span class="when">live</span></div>
-    <div class="e-m">React 19, Firebase Firestore and Cloud Functions, Vitest · doxamix-foods.web.app</div>
-    <ul>
-      <li>Prevented oversold inventory under concurrent orders with <b>three independent layers</b>: a client availability check, a Cloud Function that re-reads stock inside a Firestore transaction and rejects the whole order atomically, and security rules restricting stock writes to administrators.</li>
-      <li>Recorded rejected orders as failed with a machine-readable reason rather than dropping them silently, so the operator can tell a customer what actually happened.</li>
+      <li>Wrote a complete 10×10 engine for the Ghanaian variant, which had <b>no engine I could find</b>: bitboard move generation, alpha-beta with principal variation search, Zobrist transposition tables and quiescence search, each of the seven variant rules pinned by a named test.</li>
+      <li>Built the <b>NNUE evaluation pipeline</b> end to end: self-play data generation, per-game dataset splits preventing leakage between near-duplicate positions, int16 quantisation-aware export and versioned weight files. The Rust forward pass matches an independent integer replay of the quantisation on 1,000 of 1,000 positions.</li>
+      <li><b>Retracted a previously published Elo figure</b> in the repository after finding the benchmark had silently run a heuristic stand-in instead of a trained network, and made that fallback unreachable from a search.</li>
     </ul>
   </div>
 
   <div class="e">
     <div class="e-h"><h3>Additional systems</h3></div>
     <ul>
-      <li><b>HecTech AI Report Card Generator</b> (Google Apps Script, Gemini, WhatsApp API) — a Vault Library and Client Shell architecture across 39 class spreadsheets and three campuses, with self-scheduling triggers that defeat the six-minute execution ceiling and a circuit breaker protecting the AI quota.</li>
-      <li><b>Academic Compliance</b> (React, Firebase, Gemini) — audits lesson plans against Cambridge standards across ten departments, checking cited syllabus codes against the class stage. Live at sais-lessons.web.app.</li>
+      <li><b>Doxamix Foods</b> (React 19, Firebase Cloud Functions, Vitest) — live storefront and admin dashboard at doxamix-foods.web.app. Stock survives concurrent orders through <b>four independent layers</b>: schema validation in the security rules, a quantity merge, a Cloud Function re-reading stock inside a Firestore transaction, and an idempotency guard. 140 tests.</li>
+      <li><b>HecTech AI Report Card Generator</b> (Apps Script, Gemini, WhatsApp) — one shared library behind thin shells in 12 live class spreadsheets, each revocable; self-scheduling triggers beat the six-minute limit, and a circuit breaker guards the AI quota.</li>
     </ul>
   </div>
 
@@ -207,9 +212,9 @@
     <div class="e-h"><h3>Computing, Digital Literacy &amp; Mathematics Teacher / EdTech Developer</h3><span class="when">Aug 2021 – present</span></div>
     <div class="e-m">St. Adelaide International Schools — Dansoman &amp; Aburi campuses, Accra</div>
     <ul>
-      <li>Deliver the full Cambridge Computing and Digital Literacy curriculum and Cambridge Mathematics, producing the accompanying schemes of work and assessment materials.</li>
-      <li><b>Built and maintain the institutional software above</b>, in daily use across the school administration — report cards, timetabling, lesson-plan compliance and the school portal.</li>
-      <li>Founded and lead the school Coding Club, and run staff development on responsible classroom use of AI tools.</li>
+      <li>Deliver the full Cambridge Computing, Digital Literacy and Mathematics curricula, producing the schemes of work and assessment materials that go with them.</li>
+      <li><b>Built and maintain the institutional software above</b>, in daily use across the school — report cards, timetabling, lesson-plan compliance and the school portal.</li>
+      <li>Founded and lead the school Coding Club, and run staff development on classroom use of AI tools.</li>
     </ul>
   </div>
 
@@ -217,8 +222,7 @@
     <div class="e-h"><h3>Database Manager</h3><span class="when">2019 – 2020</span></div>
     <div class="e-m">UMB Bank, Accra — contracted through Oman Fofor</div>
     <ul>
-      <li>Administered banking database systems: schema integrity, access control and routine maintenance.</li>
-      <li>Designed and operated the backup and recovery procedures that guaranteed data continuity.</li>
+      <li>Administered banking database systems — schema integrity, access control and routine maintenance — and designed the backup and recovery procedures that guaranteed data continuity.</li>
     </ul>
   </div>
 
@@ -231,33 +235,27 @@
     </ul>
   </div>
 
-  <div class="sec"><h2>Education &amp; Certification</h2><div class="ln"></div></div>
+  <div class="sec last-page"><h2>Education &amp; Certification</h2><div class="ln"></div></div>
   <div class="e">
     <div class="e-h"><h3>BSc Telecommunication Engineering</h3><span class="when">2013 – 2017, conferred 2018</span></div>
     <div class="e-m">Ghana Technology University College, Accra — degree awarded by KNUST</div>
     <ul>
-      <li>Engineering Mathematics I–V, Signals and Systems, Information Theory, Digital Signal Processing, Computer Architecture, Microprocessor Systems. Principles of Computer Programming (A), Algorithms and Data Structures (B).</li>
+      <li>Engineering Mathematics I–V, Signals and Systems, Information Theory, DSP, Computer Architecture; Principles of Computer Programming (A), Algorithms and Data Structures (B).</li>
     </ul>
   </div>
   <ul>
     <li><b>UNICEF StartUp Lab</b> — Certificate of Participation, Learning Gaps Challenge (BaseCamp Diagnostics), March 2026.</li>
-    
-    <li><b>Google AI Essentials</b> (Coursera, 2026); JavaScript Advanced Web Certification (Coursera); Programming and Web Development Foundations (Udacity). <b>British Council</b> Partner Schools Global Network — seven certifications in classroom practice, 2022–2025.</li>
+    <li><b>Google AI Essentials</b> (Coursera, 2026); JavaScript Advanced Web Certification (Coursera); Programming and Web Development Foundations (Udacity); seven <b>British Council</b> Partner Schools certifications, 2022–2025.</li>
   </ul>
 
   <div class="sec"><h2>Languages &amp; References</h2><div class="ln"></div></div>
-  <div class="note" style="margin-bottom:3px"><b>English</b> — full professional proficiency; medium of instruction throughout secondary and university education.</div>
-  <div class="two">
-    <div class="note"><b>Dr. Ruhiya Abubakar</b> — Dean, Faculty of Engineering, Ghana Communication Technology University · rabubakar@gctu.edu.gh · +233 20 832 4097 <i>(academic referee)</i></div>
-    <div class="note"><b>Mrs. Theodora Hammond</b> — Administrator, St. Adelaide International Schools · +233 24 482 6879 <i>(current employer)</i></div>
+  <div class="note" style="margin-bottom:3px"><b>English</b> — full professional proficiency; the medium of instruction throughout my schooling and degree.</div>
+  <!-- REFERENCES -->
+  <div class="note"><b>References available on request</b> — an academic referee (Dean, Faculty of Engineering, Ghana Communication Technology University) and my current employer. Details go directly to a prospective employer.</div>
+  <!-- /REFERENCES -->
+  <div class="note" style="margin-top:4px; color:var(--ink-3)">
+    Repositories holding live school or customer data are private; walkthroughs under NDA on request. Case studies: <b>hectech.web.app</b>
   </div>
-  <div class="note" style="margin-top:5px; color:var(--ink-3)">
-    Repositories for the systems above are private where they hold live school or customer data. Walkthroughs,
-    architecture documents and access under NDA are available on request. Full portfolio and case studies:
-    <b>hectech.web.app</b>
-  </div>
-
-  <footer class="foot"><div>Hector Nii Armaakwei Aryiku — Curriculum Vitae</div><div>codingwithhector@gmail.com · +233 53 294 7022</div><div>Page 2 of 2</div></footer>
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@ step, no framework, no tracker. Open `index.html` and it works.
 ```
 index.html          the whole site
 assets/hector.jpg   portrait
-assets/*.pdf        downloadable portfolio (4 pages)
+assets/*.pdf        downloadable portfolio (10 pages) and public CV (4 pages)
 firebase.json       hosting config — site name "hectech"
 firestore.rules     contact-form rules (create-only, no reads)
 ```
@@ -39,48 +39,30 @@ If `hectech` is already taken, pick another name and change `hosting.site` in
 
 ## Contact form
 
-The form works with no setup: it opens the visitor's mail client with the message
-prefilled. That is the fallback, and it is the current behaviour.
+**Where messages go.** Set `FORM_ENDPOINT` near the bottom of `index.html` to a
+Formspree form address (`https://formspree.io/f/…`). Each message is then POSTed
+there, emailed to the Formspree account's address, and kept in the Formspree
+dashboard. The free plan covers 50 messages a month.
 
-To collect messages in Firestore instead, add a config block before the closing
-`</body>` tag in `index.html`:
+**With `FORM_ENDPOINT` empty** — and whenever the POST fails — the form opens the
+visitor's mail app with the message filled in, and copies the message to their
+clipboard. A `mailto:` link does nothing on a device with no mail app configured,
+so the copy is what stops a message being lost. The page only ever says "sent"
+after Formspree confirms delivery.
 
-```html
-<script>
-  window.__HECTECH_FIREBASE__ = {
-    apiKey: "...",
-    authDomain: "<project>.firebaseapp.com",
-    projectId: "<project>",
-    appId: "..."
-  };
-</script>
-```
+The honeypot field (`company`) is hidden from people; if a bot fills it the
+submission is dropped before anything is sent.
 
-Then deploy the rules:
-
-```bash
-npx firebase deploy --only firestore:rules
-```
-
-Messages land in the `contact_messages` collection. The rules allow `create` only —
-nobody can read, edit or delete a message from the browser, including the sender.
-Read them in the Firebase console, or with the CLI.
-
-Three things guard the form: a hidden honeypot field that bots fill and humans
-never see, field-length caps enforced in the rules rather than only in the client,
-and a strict field allow-list so an extra key in the payload is rejected outright.
-
-If the Firestore write fails for any reason, the form falls back to the mail client
-rather than failing silently. The visitor always gets a definite outcome.
+`firestore.rules` is from an earlier design that stored messages in Firestore.
+It was never deployed — Firestore is not enabled on the `hectech-portfolio`
+project — and nothing uses it now.
 
 ## Notes
 
 - **The reveal animation is progressive.** Content is visible by default; the
   scroll reveal only arms itself once JS sets `.js` on `<html>`. A script failure
   cannot leave the page blank, and `prefers-reduced-motion` skips it entirely.
-- **`heckteck-school.web.app` is spelled that way on purpose.** It is the live URL
-  of a school's production system. The brand is "HecTech" everywhere else; the
-  domain cannot be respelled without standing up a new hosting site and migrating
-  the users on it.
+- **`heckteck-school.web.app` is dead** (404). The school portal now lives at
+  `sais-portal.web.app`. Do not link the old address anywhere.
 - **Every figure on the page carries its source.** If you change a number, change
   the provenance line under it too — that pairing is the point of the design.

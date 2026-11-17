@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hector Nii Armaakwei Aryiku — Teaching CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,300..700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+  /* Page numbers come from the print engine, so they are right however long
+     the content runs. Hand-placed footers drifted onto the wrong page. */
+  @page{
+    size:A4 portrait; margin:11mm 13mm 12mm;
+    @bottom-left{ content:"Hector Nii Armaakwei Aryiku — Teaching CV";
+                  font:8pt 'IBM Plex Mono', Consolas, monospace; color:#7A7165; }
+    @bottom-right{ content:"Page " counter(page) " of " counter(pages);
+                   font:8pt 'IBM Plex Mono', Consolas, monospace; color:#7A7165; }
+  }
+  :root{
+    --ink:#1A1714; --ink-2:#3D372F; --ink-3:#635B50; --ink-4:#7A7165;
+    --rule:#DED8CB; --rule-soft:#EAE5DB; --wash:#F8F5EF;
+    --gold:#81662C;
+    --disp:'Archivo',system-ui,sans-serif;
+    --serif:'Source Serif 4',Georgia,serif;
+    --mono:'IBM Plex Mono',Consolas,monospace;
+  }
+  body{ font-family:var(--serif); color:var(--ink-2); background:#E7E2D8;
+        font-size:11pt; line-height:1.45; -webkit-font-smoothing:antialiased; }
+  .page{ background:#FDFCFA; }
+  @media screen{ .page{ max-width:210mm; margin:20px auto; padding:16mm 14mm;
+                        box-shadow:0 5px 24px rgba(26,23,20,.10); } }
+  @media print{
+    html,body{ background:#fff; }
+    .page{ margin:0; padding:0; box-shadow:none; max-width:none; }
+    .no-print{ display:none!important; }
+  }
+  /* A project may continue across a page break, but a bullet never splits and a
+     title never sits alone at the foot of a page. */
+  li, .skill, .note, .e-h, .e-m{ break-inside:avoid; }
+  .sec, .e-h, .e-m{ break-after:avoid; }
+  .no-print{ position:fixed; top:14px; right:14px; z-index:9; display:flex; gap:9px; align-items:center;
+             background:rgba(26,23,20,.92); padding:7px 8px 7px 15px; border-radius:99px; }
+  .no-print span{ color:#C9C0B0; font-size:12.55px; }
+  .no-print button{ background:var(--gold); color:#FDFCFA; border:0; cursor:pointer;
+                    padding:6px 14px; border-radius:99px; font:500 11px var(--mono); }
+
+  /* header */
+  .hdr{ border-bottom:2.5px solid var(--ink); padding-bottom:10px; }
+  .hdr-l{ display:flex; align-items:center; gap:10px; }
+  .hdr img{ height:50px; width:auto; }
+  h1{ font-family:var(--disp); font-variation-settings:'wdth' 100;
+      font-size:20pt; font-weight:800; letter-spacing:-.028em; color:var(--ink); line-height:1; }
+  .role{ font-family:var(--mono); font-size:9pt; letter-spacing:.04em; text-transform:uppercase;
+         color:var(--gold); margin-top:4px; }
+  .role .sep{ display:none; } .role .r2{ display:block; margin-top:1px; }
+  .meta{ font-family:var(--mono); font-size:9pt; color:var(--ink-3); line-height:1.6; margin-top:9px; }
+  .meta a{ color:var(--ink); text-decoration:none; }
+  .meta .d{ color:var(--ink-4); }
+  .nw{ white-space:nowrap; }
+
+  /* section */
+  .sec{ display:flex; align-items:baseline; gap:10px; margin:13px 0 7px; }
+  .sec h2{ font-family:var(--mono); font-size:9.5pt; font-weight:500; letter-spacing:.16em;
+           text-transform:uppercase; color:var(--gold); white-space:nowrap; }
+  .sec .ln{ flex:1; height:1px; background:var(--gold); opacity:.42; }
+
+  p.profile{ font-size:11pt; line-height:1.4; color:var(--ink-2); }
+  p.profile b{ color:var(--ink); font-weight:600; }
+
+  /* skills */
+  .skill{ margin-bottom:2px; font-size:11pt; line-height:1.38; }
+  .skill b{ color:var(--ink); font-weight:600; }
+
+  /* entries */
+  .e{ margin-bottom:8px; }
+  .e-h{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+  .e-h h3{ font-family:var(--disp); font-variation-settings:'wdth' 92;
+           font-size:12pt; font-weight:700; color:var(--ink); letter-spacing:-.012em; }
+  .e-h .when{ font-family:var(--mono); font-size:9pt; color:var(--ink-4); white-space:nowrap; }
+  .e-m{ margin:1px 0 3px; font-size:10pt; font-style:italic; color:var(--ink-3); }
+  .e-m b{ font-style:normal; font-weight:600; color:var(--gold); }
+  ul{ list-style:none; }
+  li{ position:relative; padding-left:13px; font-size:11pt; line-height:1.38;
+      color:var(--ink-2); margin-bottom:2px; }
+  li::before{ content:""; position:absolute; left:0; top:0.62em; width:4px; height:4px;
+              border-radius:50%; background:var(--gold); }
+  li b{ color:var(--ink); font-weight:600; }
+  li code{ font-family:var(--mono); font-size:.88em; color:var(--gold); }
+
+  .two{ display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; }
+  .note{ font-size:10.5pt; color:var(--ink-3); line-height:1.42; }
+  .note b{ color:var(--ink); font-weight:600; }
+</style>
+</head>
+<body>
+<div class="no-print"><span>Teaching CV</span><button onclick="window.print()">Save as PDF</button></div>
+
+<div class="page">
+  <header class="hdr">
+    <div class="hdr-l">
+      <div>
+        <h1>HECTOR NII ARMAAKWEI ARYIKU</h1>
+        <div class="role">Mathematics &amp; Computer Science Teacher <span class="sep">·</span> <span class="r2">Cambridge Lower Secondary &amp; IGCSE Computer Science · Teaching since 2017</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div><span class="nw">Accra, Ghana</span> <span class="d">·</span> <span class="nw">+233 53 294 7022</span> <span class="d">·</span> <a class="nw" href="mailto:codingwithhector@gmail.com">codingwithhector@gmail.com</a> <span class="d">·</span> <a class="nw" href="https://hectech.web.app">hectech.web.app</a></div>
+      <div><a class="nw" href="https://linkedin.com/in/hectorheckteck">linkedin.com/in/hectorheckteck</a></div>
+    </div>
+  </header>
+
+  <div class="sec"><h2>Profile</h2><div class="ln"></div></div>
+  <p class="profile">
+    Mathematics and Computer Science teacher with Cambridge International experience, teaching since 2017. At
+    St. Adelaide International Schools I teach Cambridge Lower Secondary and Cambridge IGCSE Computer Science,
+    within the Cambridge Computing, Digital Literacy and Mathematics curricula; I write the schemes of work and
+    assessments for them, lead the school Coding Club, and train colleagues in the
+    responsible classroom use of AI. I also build the school&rsquo;s own software &mdash; grading and report cards,
+    timetabling, lesson-plan review &mdash; so I understand how a school runs as well as how a classroom does.
+    <b>Seeking a J-1 teacher exchange placement or a sponsored Mathematics or Computer Science teaching position
+    in the United States.</b>
+  </p>
+
+  <div class="sec"><h2>Subjects &amp; Strengths</h2><div class="ln"></div></div>
+  <div class="skill"><b>Subjects:</b> Computer Science / Computing, Mathematics, Digital Literacy and ICT</div>
+  <div class="skill"><b>Levels:</b> Cambridge Lower Secondary (ages 11–14, roughly US grades 6–8) and Cambridge IGCSE Computer Science (ages 14–16, roughly US grades 9–10)</div>
+  <div class="skill"><b>Curricula:</b> Cambridge International (UK) Computing, Digital Literacy, Mathematics and IGCSE Computer Science; Ghana WASSCE Core and Elective Mathematics</div>
+  <div class="skill"><b>Planning &amp; assessment:</b> schemes of work, lesson planning to Cambridge standards, assessment design, using pupil data to find learning gaps</div>
+  <div class="skill"><b>Classroom technology:</b> AI tools used responsibly, Google Workspace, coding in Python and JavaScript, school information systems</div>
+  <div class="skill"><b>Teaching online:</b> live remote mathematics and ICT lessons for pupils across time zones</div>
+
+  <div class="sec"><h2>Teaching Experience</h2><div class="ln"></div></div>
+
+  <div class="e">
+    <div class="e-h"><h3>Computing, Digital Literacy &amp; Mathematics Teacher</h3><span class="when">Aug 2021 – present</span></div>
+    <div class="e-m">St. Adelaide International Schools — Dansoman &amp; Aburi campuses, Accra, Ghana</div>
+    <ul>
+      <li>Teach <b>Cambridge Lower Secondary</b> and <b>Cambridge IGCSE Computer Science</b>, within the Cambridge Computing, Digital Literacy and Mathematics curricula, and write the schemes of work and assessment materials for them.</li>
+      <li><b>Founded and lead the school Coding Club.</b></li>
+      <li>Run <b>staff professional development</b> on the responsible classroom use of AI tools.</li>
+      <li>Designed and built the software the school runs on &mdash; report cards, timetabling and lesson-plan review (below) &mdash; and wrote the teachers&rsquo; instruction manual for the report-card system.</li>
+    </ul>
+  </div>
+
+  <div class="e">
+    <div class="e-h"><h3>Mathematics &amp; ICT Teacher (part-time, online)</h3><span class="when">2021 – 2023</span></div>
+    <div class="e-m">Wi-Glow Lyceum — remote</div>
+    <ul>
+      <li>Taught mathematics and ICT online to pupils in different time zones, alongside my full-time post.</li>
+    </ul>
+  </div>
+
+  <div class="e">
+    <div class="e-h"><h3>Mathematics &amp; ICT Teacher</h3><span class="when">2020 – 2021</span></div>
+    <div class="e-m">Elite Montessori, Accra</div>
+    <ul>
+      <li>Taught mathematics and ICT, and assessed pupils&rsquo; digital literacy and numeracy.</li>
+    </ul>
+  </div>
+
+  <div class="e">
+    <div class="e-h"><h3>Mathematics Teacher (National Service)</h3><span class="when">2017 – 2018</span></div>
+    <div class="e-m">Accra High School, Accra</div>
+    <ul>
+      <li>Taught Core and Elective Mathematics and prepared candidates for the WASSCE, Ghana&rsquo;s national senior secondary examination.</li>
+    </ul>
+  </div>
+
+  <div class="sec"><h2>Tools I Built for My School</h2><div class="ln"></div></div>
+  <div class="e">
+    <ul>
+      <li><b>Grading and report cards</b> (SAIS Portal, in production) &mdash; teachers enter marks; averages count only the subjects a pupil actually took, so a mid-year transfer is not penalised; report cards reach parents over WhatsApp.</li>
+      <li><b>Timetabling</b> (EduScheduler Pro) &mdash; builds a full timetable for 20 classes, 63 teachers and 615 lessons a week, with no clashes, in under three minutes &mdash; work that had taken the school weeks by hand.</li>
+      <li><b>Lesson-plan review</b> (Academic Compliance, in use) &mdash; checks teachers&rsquo; weekly lesson plans against Cambridge planning standards across ten departments and routes them to the right head of department.</li>
+      <li><b>Report-card comments</b> &mdash; an AI-assisted comment writer running in 13 class spreadsheets.</li>
+      <li><b>Learning-gap diagnostics</b> (BaseCamp, pilot) &mdash; finds the specific misconception behind a pupil&rsquo;s wrong answer and suggests a targeted lesson; entered in the UNICEF StartUp Lab Learning Gaps Challenge, 2026.</li>
+    </ul>
+  </div>
+
+  <div class="sec"><h2>Other Experience</h2><div class="ln"></div></div>
+  <div class="e">
+    <div class="e-h"><h3>Database Manager</h3><span class="when">2019 – 2020</span></div>
+    <div class="e-m">UMB Bank, Accra — contracted through Oman Fofor</div>
+    <ul>
+      <li>Administered banking database systems and designed the backup and recovery procedures that kept data safe.</li>
+    </ul>
+  </div>
+
+  <div class="sec"><h2>Education &amp; Professional Development</h2><div class="ln"></div></div>
+  <div class="e">
+    <div class="e-h"><h3>BSc Telecommunication Engineering</h3><span class="when">2013 – 2017, conferred 2018</span></div>
+    <div class="e-m">Ghana Technology University College, Accra — degree awarded by KNUST</div>
+    <ul>
+      <li>Mathematics-heavy degree: Engineering Mathematics I–V, Signals and Systems, Information Theory; Principles of Computer Programming (A), Algorithms and Data Structures (B).</li>
+    </ul>
+  </div>
+  <ul>
+    <li><b>British Council</b> Partner Schools Global Network &mdash; seven certifications in classroom practice, 2022&ndash;2025.</li>
+    <li><b>Google AI Essentials</b> (Coursera, 2026); JavaScript Advanced Web Certification (Coursera); Programming and Web Development Foundations (Udacity).</li>
+    <li><b>UNICEF StartUp Lab</b> &mdash; Certificate of Participation, Learning Gaps Challenge, March 2026.</li>
+  </ul>
+
+  <div class="sec"><h2>Languages &amp; References</h2><div class="ln"></div></div>
+  <div class="note" style="margin-bottom:3px"><b>English</b> — full professional proficiency; the medium of instruction throughout my secondary and university education, and of all my teaching.</div>
+  <!-- REFERENCES -->
+  <div class="note"><b>References available on request</b> — an academic referee (Dean, Faculty of Engineering, Ghana Communication Technology University) and my current employer at St. Adelaide International Schools. Contact details supplied directly to a prospective employer.</div>
+  <!-- /REFERENCES -->
+</div>
+</body>
+</html>
